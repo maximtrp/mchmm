@@ -1,18 +1,18 @@
 from setuptools import setup
 from os.path import join, dirname
 
-setup(name='scikit-posthocs',
-      version='0.4.0',
-      description='Statistical post-hoc analysis and outlier detection algorithms',
+setup(name='mchmm',
+      version='0.1.0',
+      description='Markov chains and Hidden Markov models',
       long_description=open(join(dirname(__file__), 'DESCRIPTION.rst')).read(),
-      url='http://github.com/maximtrp/scikit-posthocs',
+      url='http://github.com/maximtrp/mchmm',
       author='Maksim Terpilowski',
       author_email='maximtrp@gmail.com',
       license='BSD',
-      packages=['scikit_posthocs'],
-      keywords='statistics posthoc anova',
+      packages=['mchmm'],
+      keywords='markov mc hmm',
       install_requires=['numpy', 'scipy', 'statsmodels',
-                        'pandas>=0.20.0', 'seaborn', 'matplotlib'],
+                        'pandas', 'seaborn', 'matplotlib'],
 	  classifiers=[
 		'Development Status :: 4 - Beta',
 
@@ -37,5 +37,5 @@ setup(name='scikit-posthocs',
 		'Programming Language :: Python :: 3.6',
 		'Programming Language :: Python :: 3.7',
 	  ],
-      test_suite='tests.posthocs_suite',
+      test_suite='tests.mchmm_suite',
       zip_safe=False)
