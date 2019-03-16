@@ -13,7 +13,9 @@ Features
 Installation
 ------------
 
-``pip install mchmm``
+.. code:: bash
+
+  $ pip install mchmm
 
 Example
 -------
