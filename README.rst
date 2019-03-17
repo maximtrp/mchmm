@@ -5,9 +5,6 @@ mchmm
 *mchmm* is a Python package implementing Markov chains and Hidden Markov models.
 
 
-*
-* Hidden Markov Models
-
 Installation
 ------------
 
