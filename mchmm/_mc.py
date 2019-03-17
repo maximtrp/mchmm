@@ -138,6 +138,9 @@ class MarkovChain:
         exp : numpy ndarray
             Expected transition frequency matrix.
 
+        kwargs : optional
+            Keyword arguments passed to `scipy.stats.chisquare` method.
+
         Returns
         -------
         chisq : float or numpy ndarray
