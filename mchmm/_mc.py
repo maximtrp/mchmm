@@ -3,8 +3,8 @@ import numpy as np
 import re
 import scipy.stats as ss
 
-class MarkovChain:
 
+class MarkovChain:
 
     def __init__(self, states=None, obs=None, obs_p=None):
         '''Discrete Markov Chain.
@@ -26,8 +26,8 @@ class MarkovChain:
         self.observed_p_matrix = np.array(obs_p)
         pass
 
-    def _create_transition_matrix(self, seq, states):
-        '''Create and return a transition frequency matrix.
+    def _transition_matrix(self, seq, states=None):
+        '''Calculate a transition frequency matrix.
 
         Parameters
         ----------
@@ -46,6 +46,8 @@ class MarkovChain:
         '''
 
         seql = np.array(list(seq))
+        if not states:
+            states = np.unique(seql)
         matrix = np.zeros((len(states), len(states)))
 
         for x, y in iter.product(range(len(states)), repeat=2):
@@ -112,7 +114,7 @@ class MarkovChain:
         self.states = np.unique(list(seq))
 
         # observed transition frequency matrix
-        self.observed_matrix = self._create_transition_matrix(seq, self.states)
+        self.observed_matrix = self._transition_matrix(seq, self.states)
         self._obs_row_totals = np.sum(self.observed_matrix, axis=1)
 
         # observed transition probability matrix
