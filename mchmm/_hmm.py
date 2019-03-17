@@ -57,15 +57,17 @@ class HiddenMarkovModel:
         '''
 
         seql = np.array(list(seq))
+        T = len(seql)
         if not states:
             states = np.unique(seql)
+        K = len(states)
 
-        matrix = np.zeros((len(states), len(states)))
+        matrix = np.zeros((K, K))
 
-        for x, y in iter.product(range(len(states)), repeat=2):
+        for x, y in iter.product(range(K), repeat=2):
             xid = np.argwhere(seql == states[x]).flatten()
             yid = xid + 1
-            yid = yid[yid < len(seql)]
+            yid = yid[yid < T]
             s = np.count_nonzero(seql[yid] == states[y])
             matrix[x, y] = s
 
@@ -108,11 +110,13 @@ class HiddenMarkovModel:
                 o = _os[_ss == states_space[i]]
                 ef[i, j] = np.count_nonzero(o == obs_space[j])
 
-        ep = ef / ef.sum(axis=1)
+        ep = ef / ef.sum(axis=1)[:,None]
         return ep
+
 
     def from_prob(self, tp, ep, obs, states, pi=None, seed=None):
         pass
+
 
     def from_seq(self, obs_seq, states_seq, pi=None, seed=None):
         '''Analyze sequences of observations and states.
