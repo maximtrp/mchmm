@@ -122,7 +122,7 @@ Running Viterbi and Baum-Welch algorithms on new observations.
 
   >>> new_obs = 'GGCATTGGGCTATAAGAGGAGCTTG'
   >>> vs, vsi = a.viterbi(new_obs)
-  >>> bws, bwsi = a.baum_welch(new_obs, iters=5)
+  >>> bws, bwsi = a.baum_welch(new_obs, iters=5, pi=[1,0], end=[1,0])
   >>> # states sequences obtained with both algorithms
   >>> print(VI, "".join(vs))
   >>> print(BW, "".join(bws))
@@ -132,5 +132,5 @@ Running Viterbi and Baum-Welch algorithms on new observations.
 ::
 
   VI 0000000001111100000000000
-  BW 0000000000111111100000000
+  BW 0000000001111111100000000
   NO GGCATTGGGCTATAAGAGGAGCTTG
