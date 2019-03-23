@@ -71,7 +71,7 @@ class HiddenMarkovModel:
             s = np.count_nonzero(seql[yid] == states[y])
             matrix[x, y] = s
 
-        matrix /= matrix.sum(axis=1)
+        matrix /= matrix.sum(axis=1)[:,None]
         return matrix
 
 

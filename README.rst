@@ -95,8 +95,8 @@ Get the transition probability matrix for all states.
 .. code:: python
 
   >>> a.tp
-  [[0.94444444 0.14285714]
-   [0.05555556 0.85714286]]
+  [[0.94444444 0.05555556]
+   [0.14285714 0.85714286]]
 
 Get the emission probability matrix for all states and observations.
 
