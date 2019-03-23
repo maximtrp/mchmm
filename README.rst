@@ -67,3 +67,62 @@ Finally, simulate a Markov chain given your data.
   array(['A', 'C', 'B', 'A', 'C', 'B', 'A', 'C', 'B', 'A'], dtype='<U1')
   >>> "".join(states)
   'ACBACBACBA'
+
+
+Hidden Markov model
+~~~~~~~~~~~~~~~~~~~
+
+Initialize a hidden Markov model with sequences of observations and states. We will use a fragment of DNA with TATA box as an example.
+
+.. code:: python
+
+  >>> import mchmm as mc
+  >>> obs_seq = 'AGACTGCATATATAAGGGGCAGGCTG'
+  >>> sts_seq = '00000000111111100000000000'
+  >>> a = mc.HiddenMarkovModel().from_seq(obs_seq, sts_seq)
+
+State names and unique observations are automatically inferred:
+
+.. code:: python
+
+  >>> a.states
+  ['0' '1']
+  >>> a.observations
+  ['A' 'C' 'G' 'T']
+
+Get a transition probability matrix for all states.
+
+.. code:: python
+
+  >>> a.tp
+  [[0.94444444 0.14285714]
+   [0.05555556 0.85714286]]
+
+Get an emission probability matrix for all states and observations.
+
+.. code:: python
+
+  >>> a.ep
+  [[0.21052632 0.21052632 0.47368421 0.10526316]
+   [0.57142857 0.         0.         0.42857143]]
+  >>> import pandas as pd
+  >>> pd.DataFrame(a.ep, index=a.states, columns=a.observations)
+            A         C         G         T
+  0  0.210526  0.210526  0.473684  0.105263
+  1  0.571429  0.000000  0.000000  0.428571
+
+Running Viterbi and Baum-Welch algorithms on new observations.
+
+.. code:: python
+
+  >>> new_obs = 'GGCATTGGGCTATAAGAGGAGCTTG'
+  >>> vs, vsi = a.viterbi(new_obs)
+  >>> bws, bwsi = a.baum_welch(new_obs, iters=5)
+  >>> # states sequences obtained with both algorithms
+  >>> print(VI, "".join(vs))
+  >>> print(BW, "".join(bws))
+  >>> # observations
+  >>> print(NO, new_obs)
+  BW 0000000000111111100000000
+  VI 0000000001111100000000000
+  NO GGCATTGGGCTATAAGAGGAGCTTG
