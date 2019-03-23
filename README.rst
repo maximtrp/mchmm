@@ -69,10 +69,10 @@ Finally, simulate a Markov chain given your data.
   'ACBACBACBA'
 
 
-Hidden Markov model
-~~~~~~~~~~~~~~~~~~~
+Hidden Markov models
+~~~~~~~~~~~~~~~~~~~~
 
-Initialize a hidden Markov model with sequences of observations and states. We will use a fragment of DNA with TATA box as an example.
+Initialize a hidden Markov model with sequences of observations and states. We will use a fragment of DNA sequence with TATA box as an example.
 
 .. code:: python
 
