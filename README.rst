@@ -123,6 +123,9 @@ Running Viterbi and Baum-Welch algorithms on new observations.
   >>> print(BW, "".join(bws))
   >>> # observations
   >>> print(NO, new_obs)
+
+::
+  
   VI 0000000001111100000000000
   BW 0000000000111111100000000
   NO GGCATTGGGCTATAAGAGGAGCTTG
