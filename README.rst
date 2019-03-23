@@ -28,7 +28,7 @@ Initialize a Markov chain using your data.
   >>> a = mc.MarkovChain().from_data('AABCABCBAAAACBCBACBABCABCBACBACBABABCBACBBCBBCBCBCBACBABABCBCBAAACABABCBBCBCBCBCBCBAABCBBCBCBCCCBABCBCBBABCBABCABCCABABCBABC')
 
 
-Get an observed transition frequency matrix.
+Get the observed transition frequency matrix.
 
 .. code:: python
 
@@ -38,7 +38,7 @@ Get an observed transition frequency matrix.
          [ 5., 30.,  3.]])
 
 
-Get an expected transition frequency matrix.
+Get the expected transition frequency matrix.
 
 .. code:: python
 
@@ -90,7 +90,7 @@ State names and unique observations are automatically inferred:
   >>> a.observations
   ['A' 'C' 'G' 'T']
 
-Get a transition probability matrix for all states.
+Get the transition probability matrix for all states.
 
 .. code:: python
 
@@ -98,13 +98,18 @@ Get a transition probability matrix for all states.
   [[0.94444444 0.14285714]
    [0.05555556 0.85714286]]
 
-Get an emission probability matrix for all states and observations.
+Get the emission probability matrix for all states and observations.
 
 .. code:: python
 
   >>> a.ep
   [[0.21052632 0.21052632 0.47368421 0.10526316]
    [0.57142857 0.         0.         0.42857143]]
+
+Converting the emission matrix to pandas DataFrame:
+
+.. code:: python
+
   >>> import pandas as pd
   >>> pd.DataFrame(a.ep, index=a.states, columns=a.observations)
             A         C         G         T
@@ -125,7 +130,7 @@ Running Viterbi and Baum-Welch algorithms on new observations.
   >>> print(NO, new_obs)
 
 ::
-  
+
   VI 0000000001111100000000000
   BW 0000000000111111100000000
   NO GGCATTGGGCTATAAGAGGAGCTTG
