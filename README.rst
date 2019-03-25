@@ -5,6 +5,13 @@ mchmm
 *mchmm* is a Python package implementing Markov chains and Hidden Markov models.
 
 
+Dependencies
+------------
+
+* `NumPy <https://www.numpy.org/>`_
+* `SciPy <https://www.scipy.org/>`_
+
+
 Installation
 ------------
 

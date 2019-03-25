@@ -11,8 +11,7 @@ setup(name='mchmm',
       license='BSD',
       packages=['mchmm'],
       keywords='markov mc hmm',
-      install_requires=['numpy', 'scipy', 'statsmodels',
-                        'pandas', 'seaborn', 'matplotlib'],
+      install_requires=['numpy', 'scipy'],
 	  classifiers=[
 		'Development Status :: 4 - Beta',
 
