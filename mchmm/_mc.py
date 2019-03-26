@@ -46,7 +46,7 @@ class MarkovChain:
         '''
 
         seql = np.array(list(seq))
-        if not states:
+        if states is None:
             states = np.unique(seql)
         matrix = np.zeros((len(states), len(states)))
 
@@ -153,7 +153,7 @@ class MarkovChain:
         return ss.chisquare(f_obs=obs, f_exp=exp, **kwargs)
 
 
-    def simulate(self, n, f=None, states=None, start=None, ret='both', seed=None):
+    def simulate(self, n, tf=None, states=None, start=None, ret='both', seed=None):
         '''Markov chain simulation based on `scipy.stats.multinomial`.
 
         Parameters
@@ -161,7 +161,7 @@ class MarkovChain:
         n : int
             Number of states to simulate.
 
-        f : numpy ndarray
+        tf : numpy ndarray
             Transition frequency matrix. If None, `self.observed_matrix`
             attribute is used.
 
@@ -193,14 +193,14 @@ class MarkovChain:
         '''
 
         # matrices init
-        if not f:
-            f = self.observed_matrix
+        if tf is None:
+            tf = self.observed_matrix
             fp = self.observed_p_matrix
         else:
-            fp = f / f.sum(axis=1)
+            fp = tf / tf.sum(axis=1)
 
         # states init
-        if not states:
+        if states is None:
             states = self.states
         if not isinstance(states, np.ndarray):
             states = np.array(states)
@@ -208,8 +208,8 @@ class MarkovChain:
         # choose a state to begin with
         # `_start` is always an index of state
         if not start:
-            row_totals = f.sum(axis=1)
-            _start = np.argmax(row_totals / f.sum())
+            row_totals = tf.sum(axis=1)
+            _start = np.argmax(row_totals / tf.sum())
         elif isinstance(start, int):
             _start = start if start < len(states) else len(states)-1
         elif isinstance(start, str):

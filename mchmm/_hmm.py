@@ -58,7 +58,7 @@ class HiddenMarkovModel:
 
         seql = np.array(list(seq))
         T = len(seql)
-        if not states:
+        if states is None:
             states = np.unique(seql)
         K = len(states)
 
@@ -147,10 +147,10 @@ class HiddenMarkovModel:
         self.tp = self._transition_matrix(self.states_seq)
         self.ep = self._emission_matrix(self.obs_seq, self.states_seq)
 
-        if not pi:
+        if pi is None:
             self.pi = ss.uniform().rvs(size=self.states.size, random_state=seed)
 
-        if not end:
+        if end is None:
             self.end = ss.uniform().rvs(size=self.states.size, random_state=seed)
 
         return self
@@ -191,23 +191,23 @@ class HiddenMarkovModel:
             Sequence of state indices.
         '''
 
-        if not states:
+        if states is None:
             states = self.states
 
-        if not tp:
+        if tp is None:
             tp = self.tp
 
-        if not ep:
+        if ep is None:
             ep = self.ep
 
-        if not pi:
+        if pi is None:
             pi = self.pi
         else:
             pi = np.array(pi)
 
         obs_seq = np.array(list(obs_seq))
 
-        if not obs:
+        if obs is None:
             obs = np.unique(obs_seq)
 
         T = len(obs_seq)
@@ -280,13 +280,13 @@ class HiddenMarkovModel:
             Sequence of state indices.
         '''
 
-        if not states:
+        if states is None:
             states = self.states
 
-        if not tp:
+        if tp is None:
             tp = self.tp
 
-        if not ep:
+        if ep is None:
             ep = self.ep
 
         if pi:
@@ -301,7 +301,7 @@ class HiddenMarkovModel:
 
         obs_seq = np.array(list(obs_seq))
 
-        if not obs:
+        if obs is None:
             obs = np.unique(obs_seq)
 
         T = len(obs_seq)
