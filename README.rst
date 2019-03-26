@@ -2,6 +2,12 @@
 mchmm
 =====
 
+.. image:: https://travis-ci.org/maximtrp/mchmm.svg?branch=master
+    :target: https://travis-ci.org/maximtrp/mchmm
+.. image:: https://img.shields.io/github/issues/maximtrp/mchmm.svg
+    :target: https://github.com/maximtrp/mchmm/issues
+
+
 *mchmm* is a Python package implementing Markov chains and Hidden Markov models.
 
 
