@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import itertools as iter
 import numpy as np
 import re
