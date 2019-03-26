@@ -44,6 +44,16 @@ Get the observed transition frequency matrix.
          [19.,  5., 29.],
          [ 5., 30.,  3.]])
 
+Use Pandas to annotate columns and rows.
+
+.. code:: python
+
+  >>> import pandas as pd
+  >>> pd.DataFrame(a.observed_matrix, index=a.states, columns=a.states, dtype=int)
+      A   B   C
+  A   7  18   7
+  B  19   5  29
+  C   5  30   3
 
 Get the expected transition frequency matrix.
 
