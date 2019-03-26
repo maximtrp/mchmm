@@ -95,7 +95,7 @@ Finally, simulate a Markov chain given your data.
 Hidden Markov models
 ~~~~~~~~~~~~~~~~~~~~
 
-Initialize a hidden Markov model with sequences of observations and states. We will use a fragment of DNA sequence with TATA box as an example.
+We will use a fragment of DNA sequence with TATA box as an example. Initializing a hidden Markov model with sequences of observations and states:
 
 .. code:: python
 
@@ -104,7 +104,7 @@ Initialize a hidden Markov model with sequences of observations and states. We w
   >>> sts_seq = '00000000111111100000000000'
   >>> a = mc.HiddenMarkovModel().from_seq(obs_seq, sts_seq)
 
-State names and unique observations are automatically inferred:
+Unique states and observations are automatically inferred:
 
 .. code:: python
 
