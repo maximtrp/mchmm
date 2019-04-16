@@ -25,7 +25,7 @@ class MarkovChain:
         self.states = np.array(states)
         self.observed_matrix = np.array(obs)
         self.observed_p_matrix = np.array(obs_p)
-        pass
+
 
     def _transition_matrix(self, seq, states=None):
         '''Calculate a transition frequency matrix.
@@ -61,7 +61,7 @@ class MarkovChain:
         return matrix
 
 
-    def nth_order_matrix(self, mat, order=2):
+    def n_order_matrix(self, mat, order=2):
         '''Create Nth order expected transition probability matrix.
 
         Parameters
@@ -82,7 +82,7 @@ class MarkovChain:
         if order > 1:
             _mat = np.dot(mat, mat)
             order -= 1
-            return self.nth_order_matrix(_mat, order)
+            return self.n_order_matrix(_mat, order)
         else:
             return mat
 
@@ -110,6 +110,22 @@ class MarkovChain:
 
 
     def from_data(self, seq):
+        '''Infer a Markov chain from data. States, frequency and probability
+        matrices are automatically calculated and assigned to as class
+        attributes.
+
+        Parameters
+        ----------
+        seq : numpy ndarray
+            A string or an array-like object exposing the array interface and
+            containing strings or ints.
+
+        Returns
+        -------
+        MarkovChain : object
+            Trained MarkovChain class instance.
+        '''
+
 
         # states list
         self.states = np.unique(list(seq))
