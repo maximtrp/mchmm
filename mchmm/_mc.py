@@ -135,7 +135,7 @@ class MarkovChain:
         self._obs_row_totals = np.sum(self.observed_matrix, axis=1)
 
         # observed transition probability matrix
-        self.observed_p_matrix = self.observed_matrix / self._obs_row_totals
+        self.observed_p_matrix = self.observed_matrix / self._obs_row_totals[:, None]
 
         # expected transition frequency matrix
         self.expected_matrix = ss.contingency.expected_freq(self.observed_matrix)
@@ -214,7 +214,7 @@ class MarkovChain:
             tf = self.observed_matrix
             fp = self.observed_p_matrix
         else:
-            fp = tf / tf.sum(axis=1)
+            fp = tf / tf.sum(axis=1)[:, None]
 
         # states init
         if states is None:

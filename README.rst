@@ -55,9 +55,10 @@ And the observed transition probability matrix:
 .. code:: python
 
   >>> a.observed_p_matrix
-  array([[0.21875   , 0.33962264, 0.18421053],
-         [0.59375   , 0.09433962, 0.76315789],
-         [0.15625   , 0.56603774, 0.07894737]])
+  array([[0.21875   , 0.5625    , 0.21875   ],
+         [0.35849057, 0.09433962, 0.54716981],
+         [0.13157895, 0.78947368, 0.07894737]])
+
 
 Use Pandas to annotate columns and rows.
 
@@ -84,9 +85,10 @@ Calculate Nth order transition probability matrix:
 .. code:: python
 
   >>> a.n_order_matrix(a.observed_p_matrix, order=2)
-  array([[0.2782854 , 0.21060243, 0.31402469],
-         [0.30514038, 0.64252707, 0.24162034],
-         [0.38260012, 0.15115301, 0.46699175]])
+  array([[0.2782854 , 0.34881028, 0.37290432],
+         [0.1842357 , 0.64252707, 0.17323722],
+         [0.32218957, 0.21081868, 0.46699175]])
+
 
 Carry out a chi-squared test.
 
