@@ -62,7 +62,7 @@ class MarkovChain:
 
 
     def n_order_matrix(self, mat, order=2):
-        '''Create Nth order expected transition probability matrix.
+        '''Create Nth order transition probability matrix.
 
         Parameters
         ----------
@@ -70,13 +70,13 @@ class MarkovChain:
             Observed transition probability matrix.
 
         order : int, optional
-            Order of expected transition probability matrix to return.
+            Order of transition probability matrix to return.
             Default is 2.
 
         Returns
         -------
         x : numpy ndarray
-            Nth order expected transition probability matrix.
+            Nth order transition probability matrix.
         '''
 
         if order > 1:

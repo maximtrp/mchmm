@@ -50,6 +50,15 @@ Get the observed transition frequency matrix.
          [19.,  5., 29.],
          [ 5., 30.,  3.]])
 
+And the observed transition probability matrix:
+
+.. code:: python
+
+  >>> a.observed_p_matrix
+  array([[0.21875   , 0.33962264, 0.18421053],
+         [0.59375   , 0.09433962, 0.76315789],
+         [0.15625   , 0.56603774, 0.07894737]])
+
 Use Pandas to annotate columns and rows.
 
 .. code:: python
@@ -70,6 +79,14 @@ Get the expected transition frequency matrix.
          [13.35772358, 22.83739837, 16.80487805],
          [ 9.57723577, 16.37398374, 12.04878049]])
 
+Calculate Nth order transition probability matrix:
+
+.. code:: python
+
+  >>> a.n_order_matrix(a.observed_p_matrix, order=2)
+  array([[0.2782854 , 0.21060243, 0.31402469],
+         [0.30514038, 0.64252707, 0.24162034],
+         [0.38260012, 0.15115301, 0.46699175]])
 
 Carry out a chi-squared test.
 
