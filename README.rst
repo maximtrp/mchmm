@@ -164,7 +164,7 @@ Converting the emission matrix to pandas DataFrame:
 
 Directed graph of the hidden Markov model:
 
-  .. image:: images/hmm.png
+.. image:: images/hmm.png
 
 Running Viterbi and Baum-Welch algorithms on new observations.
 
