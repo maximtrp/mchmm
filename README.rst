@@ -59,6 +59,10 @@ And the observed transition probability matrix:
          [0.35849057, 0.09433962, 0.54716981],
          [0.13157895, 0.78947368, 0.07894737]])
 
+Directed graph representation of the Markov chain:
+
+.. image:: images/mc.png
+
 
 Use Pandas to annotate columns and rows.
 
