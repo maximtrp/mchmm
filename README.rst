@@ -59,7 +59,7 @@ And the observed transition probability matrix:
          [0.35849057, 0.09433962, 0.54716981],
          [0.13157895, 0.78947368, 0.07894737]])
 
-Directed graph representation of the Markov chain:
+Directed graph of the Markov chain:
 
 .. image:: images/mc.png
 
@@ -161,6 +161,10 @@ Converting the emission matrix to pandas DataFrame:
             A         C         G         T
   0  0.210526  0.210526  0.473684  0.105263
   1  0.571429  0.000000  0.000000  0.428571
+
+Directed graph of the hidden Markov model:
+
+  .. image:: images/hmm.png
 
 Running Viterbi and Baum-Welch algorithms on new observations.
 
