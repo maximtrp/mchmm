@@ -21,6 +21,15 @@ Dependencies
 Installation
 ------------
 
+1. Install from PyPi:
+
+.. code:: bash
+
+  $ pip install mchmm
+
+
+2. Clone a GitHub repository:
+
 .. code:: bash
 
   $ git clone https://github.com/maximtrp/mchmm.git
