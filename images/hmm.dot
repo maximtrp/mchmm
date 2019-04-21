@@ -1,6 +1,7 @@
 digraph G {
     rank = same;
-    graph [style = filled];
+    ranksep = 1.5;
+    rankdir = TB;
     node [fontname="Roboto bold", fontsize = 18];
     edge [fontname="Iosevka", fontsize = 12];
 
@@ -14,26 +15,23 @@ digraph G {
         S0:ne -> S1:nw [label = "0.06"];
     
         S1:sw -> S0:se [label = "0.14"];
-        S1:se -> S1:ne [label = "0.86"];  
-    
+        S1:se -> S1:ne [label = "0.86"];    
     }
     
-    ranksep = 1.25;
-    rankdir = TB;
 
     subgraph obs {
         node [shape = circle]
         A C G T
     }
 
-    S0 -> A [label = "0.21"]
+    S0 -> A [label = "0.21", constraint=false]
     S0 -> C [label = "0.21"]
     S0 -> G [label = "0.47"]
-    S0 -> T [label = "0.11"]
+    S0 -> T [label = "0.11", constraint=false]
 
-    S1 -> A [label = "0.57"]
+    S1 -> A [label = "0.57", color=red; labelfontcolor=red; constraint=false]
     S1 -> C [label = "0.0"]
     S1 -> G [label = "0.0"]
-    S1 -> T [label = "0.43"]
+    S1 -> T [label = "0.43", color=red; labelfontcolor=red; constraint=false]
 
 }

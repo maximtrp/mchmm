@@ -10,10 +10,10 @@ setup(name='mchmm',
       author_email='maximtrp@gmail.com',
       license='BSD',
       packages=['mchmm'],
-      keywords='markov mc hmm',
+      keywords='markovchain hmm',
       install_requires=['numpy', 'scipy'],
 	  classifiers=[
-		'Development Status :: 4 - Beta',
+		'Development Status :: 3 - Alpha',
 
 		'Intended Audience :: Education',
 		'Intended Audience :: Information Technology',
