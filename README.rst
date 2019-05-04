@@ -6,6 +6,8 @@ mchmm
     :target: https://travis-ci.org/maximtrp/mchmm
 .. image:: https://img.shields.io/github/issues/maximtrp/mchmm.svg
     :target: https://github.com/maximtrp/mchmm/issues
+.. image:: https://codecov.io/gh/maximtrp/mchmm/branch/master/graph/badge.svg
+    :target: https://codecov.io/gh/maximtrp/mchmm
 .. image:: https://pepy.tech/badge/mchmm
     :target: https://pepy.tech/project/mchmm
 
