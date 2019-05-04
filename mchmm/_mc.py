@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import itertools as iter
 import numpy as np
+import numpy.linalg as nl
 import re
 import scipy.stats as ss
 
@@ -79,12 +80,7 @@ class MarkovChain:
             Nth order transition probability matrix.
         '''
 
-        if order > 1:
-            _mat = np.dot(mat, mat)
-            order -= 1
-            return self.n_order_matrix(_mat, order)
-        else:
-            return mat
+        return nl.matrix_power(mat, order)
 
 
     def prob_to_freq_matrix(self, mat, row_totals):
