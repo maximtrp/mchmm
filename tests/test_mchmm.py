@@ -6,17 +6,24 @@ import unittest
 
 class TestMC(unittest.TestCase):
 
-    seq = 'CCCAAAAAACCCCCAACCDDCCBBBBBCCCBBCCCCCAAAAACCAAACCDCCDDCAAAAAAC'
+    seq = 'ABCABCABCACBCBA'
 
     def test_tfm(self):
-        '''Checking transition frequency matrix correctness'''
-        result = np.array([[17,0,5,0],
-                           [0,5,2,0],
-                           [5,2,17,3],
-                           [0,0,3,2]])
+        '''Checking transition frequency matrix'''
+        result = np.array([[0,3,1],
+                           [1,0,4],
+                           [3,2,0]])
 
         a = mc.MarkovChain().from_data(self.seq)
         self.assertTrue(np.all(a.observed_matrix == result))
+
+    def test_tpm(self):
+        '''Checking transition probability matrix'''
+        tfm = np.array([[0,3,1], [1,0,4], [3,2,0]])
+        result = tfm / tfm.sum(axis=1)[:, None]
+
+        a = mc.MarkovChain().from_data(self.seq)
+        self.assertTrue(np.all(a.observed_p_matrix == result))
 
 
 
