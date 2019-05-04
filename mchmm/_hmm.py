@@ -38,7 +38,7 @@ class HiddenMarkovModel:
         self.ep = np.array(ep)
         self.pi = np.array(pi)
 
-    def _transition_matrix(self, seq, states=None):
+    def _transition_matrix(self, seq, states):
         '''Calculate a transition probability matrix which stores the transition
         probability of transiting from state i to state j.
 
@@ -47,7 +47,7 @@ class HiddenMarkovModel:
         seq : str or array_like
             Sequence of states.
 
-        states : array_like, optional
+        states : array_like
             List of states.
 
         Returns
@@ -59,8 +59,6 @@ class HiddenMarkovModel:
 
         seql = np.array(list(seq))
         T = len(seql)
-        if states is None:
-            states = np.unique(seql)
         K = len(states)
 
         matrix = np.zeros((K, K))
@@ -145,7 +143,7 @@ class HiddenMarkovModel:
         self.observations = np.unique(self.obs_seq)
         self.states_seq = np.array(list(states_seq))
         self.states = np.unique(self.states_seq)
-        self.tp = self._transition_matrix(self.states_seq)
+        self.tp = self._transition_matrix(self.states_seq, self.states)
         self.ep = self._emission_matrix(self.obs_seq, self.states_seq)
 
         if pi is None:

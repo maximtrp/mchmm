@@ -28,7 +28,7 @@ class MarkovChain:
         self.observed_p_matrix = np.array(obs_p)
 
 
-    def _transition_matrix(self, seq, states=None):
+    def _transition_matrix(self, seq, states):
         '''Calculate a transition frequency matrix.
 
         Parameters
@@ -48,8 +48,6 @@ class MarkovChain:
         '''
 
         seql = np.array(list(seq))
-        if states is None:
-            states = np.unique(seql)
         matrix = np.zeros((len(states), len(states)))
 
         for x, y in iter.product(range(len(states)), repeat=2):
