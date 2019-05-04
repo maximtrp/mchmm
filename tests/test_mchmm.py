@@ -19,7 +19,7 @@ class TestMC(unittest.TestCase):
 
     def test_tpm(self):
         '''Checking transition probability matrix'''
-        tfm = np.array([[0,3,1], [1,0,4], [3,2,0]])
+        tfm = np.array([[0,3,1], [1,0,4], [3,2,0]], dtype=np.float)
         result = tfm / tfm.sum(axis=1)[:, None]
 
         a = mc.MarkovChain().from_data(self.seq)
