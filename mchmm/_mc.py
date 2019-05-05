@@ -45,7 +45,7 @@ class MarkovChain:
 
         '''
 
-        seql = np.array(list(seq)) if seq else self.seq
+        seql = self.seq if seq is None else np.array(list(seq))
         if states is None:
             states = self.states
         matrix = np.zeros((len(states), len(states)))
@@ -78,7 +78,7 @@ class MarkovChain:
             Nth order transition probability matrix.
         '''
 
-        return nl.matrix_power(mat if mat else self.observed_p_matrix, order)
+        return nl.matrix_power(self.observed_p_matrix if mat is None else mat, order)
 
 
     def prob_to_freq_matrix(self, mat=None, row_totals=None):
@@ -99,8 +99,8 @@ class MarkovChain:
         x : numpy ndarray
             Transition frequency matrix.
         '''
-        _mat = mat if mat else self.observed_p_matrix
-        _rt = row_totals if row_totals else self._obs_row_totals
+        _mat = self.observed_p_matrix if mat is None else mat
+        _rt = self._obs_row_totals if row_totals is None else row_totals
         return _mat * _rt
 
 
@@ -162,8 +162,8 @@ class MarkovChain:
         p : float or numpy ndarray
             P value of the test.
         '''
-        _obs = obs if obs else self.observed_matrix
-        _exp = exp if exp else self.expected_matrix
+        _obs = self.observed_matrix if obs is None else obs
+        _exp = self.expected_matrix if exp is None else exp
         return ss.chisquare(f_obs=_obs, f_exp=_exp, **kwargs)
 
 

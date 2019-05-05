@@ -55,7 +55,7 @@ class HiddenMarkovModel:
 
         '''
 
-        seql = np.array(list(seq)) if seq else self.states_seq
+        seql = self.states_seq if seq is None else np.array(list(seq))
         if states is None:
             states = self.states
         T = len(seql)
@@ -94,11 +94,11 @@ class HiddenMarkovModel:
 
         '''
 
-        _os = np.array(list(obs_seq)) if obs_seq else self.obs_seq
-        _ss = np.array(list(states_seq)) if states_seq else self.states_seq
+        _os = self.obs_seq if obs_seq is None else np.array(list(obs_seq))
+        _ss = self.states_seq if states_seq is None else np.array(list(states_seq))
 
-        obs_space = np.sort(np.array(list(obs))) if obs else np.unique(_os)
-        states_space = np.sort(np.array(list(states))) if states else np.unique(_ss)
+        obs_space = np.unique(_os) if obs is None else np.sort(np.array(list(obs)))
+        states_space = np.unique(_ss) if states is None else np.sort(np.array(list(states)))
         k = states_space.size
         n = obs_space.size
 
