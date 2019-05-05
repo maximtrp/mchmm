@@ -26,7 +26,7 @@ class MarkovChain:
         self.observed_p_matrix = np.array(obs_p)
 
 
-    def _transition_matrix(self, seq, states):
+    def _transition_matrix(self, seq=None, states=None):
         '''Calculate a transition frequency matrix.
 
         Parameters
@@ -45,7 +45,9 @@ class MarkovChain:
 
         '''
 
-        seql = np.array(list(seq))
+        seql = np.array(list(seq)) if seq else self.seq
+        if states is None:
+            states = self.states
         matrix = np.zeros((len(states), len(states)))
 
         for x, y in itertools.product(range(len(states)), repeat=2):
@@ -109,9 +111,9 @@ class MarkovChain:
 
         Parameters
         ----------
-        seq : numpy ndarray
-            A string or an array-like object exposing the array interface and
-            containing strings or ints.
+        seq : numpy ndarray, array_like, str
+            Sequence of events. A string or an array-like object exposing the
+            array interface and containing strings or ints.
 
         Returns
         -------
@@ -121,6 +123,7 @@ class MarkovChain:
 
 
         # states list
+        self.seq = np.array(list(seq))
         self.states = np.unique(list(seq))
 
         # observed transition frequency matrix
