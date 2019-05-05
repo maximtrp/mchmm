@@ -46,5 +46,23 @@ class TestMC(unittest.TestCase):
         a = hmm.HiddenMarkovModel().from_seq(obs_seq, sts_seq)
         self.assertTrue(np.allclose(a.ep, result))
 
+    def test_vit(self):
+        '''Checking Viterbi'''
+
+        obs_seq = 'AGACTGCATATATAAGGGGCAGGCTG'
+        sts_seq = '00000000111111100000000000'
+        a = hmm.HiddenMarkovModel().from_seq(obs_seq, sts_seq)
+        b = a.viterbi(obs_seq)
+        self.assertTrue(isinstance(b[0], np.ndarray) and isinstance(b[1], np.ndarray))
+
+    def test_bw(self):
+        '''Checking Baum-Welch'''
+
+        obs_seq = 'AGACTGCATATATAAGGGGCAGGCTG'
+        sts_seq = '00000000111111100000000000'
+        a = hmm.HiddenMarkovModel().from_seq(obs_seq, sts_seq)
+        b = a.baum_welch(obs_seq, iters=3)
+        self.assertTrue(isinstance(b[0], np.ndarray) and isinstance(b[1], np.ndarray))
+
 if __name__ == '__main__':
     unittest.main()
