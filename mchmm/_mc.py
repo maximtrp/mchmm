@@ -58,7 +58,7 @@ class MarkovChain:
         return matrix
 
 
-    def n_order_matrix(self, mat, order=2):
+    def n_order_matrix(self, mat=None, order=2):
         '''Create Nth order transition probability matrix.
 
         Parameters
@@ -76,10 +76,10 @@ class MarkovChain:
             Nth order transition probability matrix.
         '''
 
-        return nl.matrix_power(mat, order)
+        return nl.matrix_power(mat if mat else self.observed_p_matrix, order)
 
 
-    def prob_to_freq_matrix(self, mat, row_totals):
+    def prob_to_freq_matrix(self, mat=None, row_totals=None):
         '''Calculate a transition frequency matrix given a transition probability
         matrix and row totals. This method is meant to be used to calculate a
         frequency matrix for a Nth order transition probability matrix.
@@ -97,8 +97,9 @@ class MarkovChain:
         x : numpy ndarray
             Transition frequency matrix.
         '''
-
-        return mat * row_totals
+        _mat = mat if mat else self.observed_p_matrix
+        _rt = row_totals if row_totals else self._obs_row_totals
+        return _mat * _rt
 
 
     def from_data(self, seq):
@@ -135,7 +136,7 @@ class MarkovChain:
         return self
 
 
-    def chisquare(self, obs, exp, **kwargs):
+    def chisquare(self, obs=None, exp=None, **kwargs):
         '''Wrapper function for carrying out a chi-squared test using
         `scipy.stats.chisquare` method.
 
@@ -158,8 +159,9 @@ class MarkovChain:
         p : float or numpy ndarray
             P value of the test.
         '''
-
-        return ss.chisquare(f_obs=obs, f_exp=exp, **kwargs)
+        _obs = obs if obs else self.observed_matrix
+        _exp = exp if exp else self.expected_matrix
+        return ss.chisquare(f_obs=_obs, f_exp=_exp, **kwargs)
 
 
     def simulate(self, n, tf=None, states=None, start=None, ret='both', seed=None):

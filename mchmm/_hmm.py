@@ -1,9 +1,7 @@
 # -*- coding: utf-8 -*-
 import itertools
 import numpy as np
-import re
 import scipy.stats as ss
-
 
 class HiddenMarkovModel:
 
