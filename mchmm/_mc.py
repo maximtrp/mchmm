@@ -218,7 +218,7 @@ class MarkovChain:
 
         # choose a state to begin with
         # `_start` is always an index of state
-        if not start:
+        if start is None:
             row_totals = tf.sum(axis=1)
             _start = np.argmax(row_totals / tf.sum())
         elif isinstance(start, int):
