@@ -10,6 +10,8 @@ mchmm
     :target: https://codecov.io/gh/maximtrp/mchmm
 .. image:: https://pepy.tech/badge/mchmm
     :target: https://pepy.tech/project/mchmm
+.. image:: https://img.shields.io/pypi/v/mchmm.svg
+    :target: https://pypi.python.org/pypi/mchmm/
 
 *mchmm* is a Python package implementing Markov chains and Hidden Markov models in pure NumPy and SciPy.
 
