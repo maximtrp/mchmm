@@ -1,10 +1,8 @@
 # -*- coding: utf-8 -*-
-import itertools as iter
+import itertools
 import numpy as np
 import numpy.linalg as nl
-import re
 import scipy.stats as ss
-
 
 class MarkovChain:
 
@@ -50,7 +48,7 @@ class MarkovChain:
         seql = np.array(list(seq))
         matrix = np.zeros((len(states), len(states)))
 
-        for x, y in iter.product(range(len(states)), repeat=2):
+        for x, y in itertools.product(range(len(states)), repeat=2):
             xid = np.argwhere(seql == states[x]).flatten()
             yid = xid + 1
             yid = yid[yid < len(seql)]

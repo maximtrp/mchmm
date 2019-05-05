@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-import itertools as iter
+import itertools
 import numpy as np
 import re
 import scipy.stats as ss
@@ -38,7 +38,7 @@ class HiddenMarkovModel:
         self.ep = np.array(ep)
         self.pi = np.array(pi)
 
-    def _transition_matrix(self, seq, states):
+    def _transition_matrix(self, seq=None, states=None):
         '''Calculate a transition probability matrix which stores the transition
         probability of transiting from state i to state j.
 
@@ -48,7 +48,7 @@ class HiddenMarkovModel:
             Sequence of states.
 
         states : array_like
-            List of states.
+            List of unique states.
 
         Returns
         -------
@@ -57,13 +57,15 @@ class HiddenMarkovModel:
 
         '''
 
-        seql = np.array(list(seq))
+        seql = np.array(list(seq)) if seq else self.states_seq
+        if states is None:
+            states = self.states
         T = len(seql)
         K = len(states)
 
         matrix = np.zeros((K, K))
 
-        for x, y in iter.product(range(K), repeat=2):
+        for x, y in itertools.product(range(K), repeat=2):
             xid = np.argwhere(seql == states[x]).flatten()
             yid = xid + 1
             yid = yid[yid < T]
@@ -74,7 +76,7 @@ class HiddenMarkovModel:
         return matrix
 
 
-    def _emission_matrix(self, obs_seq, states_seq, obs=None, states=None):
+    def _emission_matrix(self, obs_seq=None, states_seq=None, obs=None, states=None):
         '''Calculate an emission probability matrix.
 
         Parameters
@@ -94,8 +96,8 @@ class HiddenMarkovModel:
 
         '''
 
-        _os = np.array(list(obs_seq))
-        _ss = np.array(list(states_seq))
+        _os = np.array(list(obs_seq)) if obs_seq else self.obs_seq
+        _ss = np.array(list(states_seq)) if states_seq else self.states_seq
 
         obs_space = np.sort(np.array(list(obs))) if obs else np.unique(_os)
         states_space = np.sort(np.array(list(states))) if states else np.unique(_ss)
@@ -312,7 +314,7 @@ class HiddenMarkovModel:
         alpha = np.zeros((K, T))
         beta = np.zeros((K, T))
 
-        for cycle in range(iters):
+        for _ in range(iters):
             alpha[:, 0] = pi * ep[:, s(0)]
             alpha[:, 0] /= alpha[:, 0].sum()
 
