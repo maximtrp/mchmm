@@ -49,7 +49,7 @@ Features
 Discrete Markov chains
 ~~~~~~~~~~~~~~~~~~~~~~
 
-Initialize a Markov chain using your data.
+Initializing a Markov chain using some data.
 
 .. code:: python
 
@@ -57,7 +57,7 @@ Initialize a Markov chain using your data.
   >>> a = mc.MarkovChain().from_data('AABCABCBAAAACBCBACBABCABCBACBACBABABCBACBBCBBCBCBCBACBABABCBCBAAACABABCBBCBCBCBCBCBAABCBBCBCBCCCBABCBCBBABCBABCABCCABABCBABC')
 
 
-Get the observed transition frequency matrix.
+Now, we can look at the observed transition *frequency* matrix:
 
 .. code:: python
 
@@ -66,7 +66,7 @@ Get the observed transition frequency matrix.
          [19.,  5., 29.],
          [ 5., 30.,  3.]])
 
-And the observed transition probability matrix:
+And the observed transition *probability* matrix:
 
 .. code:: python
 
@@ -75,12 +75,12 @@ And the observed transition probability matrix:
          [0.35849057, 0.09433962, 0.54716981],
          [0.13157895, 0.78947368, 0.07894737]])
 
-Directed graph of the Markov chain:
+Here is the directed graph of the Markov chain:
 
 .. image:: images/mc.png
 
 
-Use Pandas to annotate columns and rows.
+Pandas can help us annotate columns and rows:
 
 .. code:: python
 
@@ -91,7 +91,7 @@ Use Pandas to annotate columns and rows.
   B  19   5  29
   C   5  30   3
 
-Get the expected transition frequency matrix.
+Viewing the expected transition frequency matrix:
 
 .. code:: python
 
@@ -100,7 +100,7 @@ Get the expected transition frequency matrix.
          [13.35772358, 22.83739837, 16.80487805],
          [ 9.57723577, 16.37398374, 12.04878049]])
 
-Calculate Nth order transition probability matrix:
+Calculating Nth order transition probability matrix:
 
 .. code:: python
 
@@ -110,7 +110,7 @@ Calculate Nth order transition probability matrix:
          [0.32218957, 0.21081868, 0.46699175]])
 
 
-Carry out a chi-squared test.
+Carrying out a chi-squared test:
 
 .. code:: python
 
@@ -118,7 +118,7 @@ Carry out a chi-squared test.
   Power_divergenceResult(statistic=47.89038802624337, pvalue=1.0367838347591701e-07)
 
 
-Finally, simulate a Markov chain given your data.
+Finally, let's simulate a Markov chain given our data.
 
 .. code:: python
 
@@ -152,7 +152,7 @@ Unique states and observations are automatically inferred:
   >>> a.observations
   ['A' 'C' 'G' 'T']
 
-Get the transition probability matrix for all states.
+The transition probability matrix for all states can be accessed using `tp` attribute:
 
 .. code:: python
 
@@ -160,7 +160,7 @@ Get the transition probability matrix for all states.
   [[0.94444444 0.05555556]
    [0.14285714 0.85714286]]
 
-Get the emission probability matrix for all states and observations.
+There is also `ep` attribute for the emission probability matrix for all states and observations.
 
 .. code:: python
 
@@ -168,7 +168,7 @@ Get the emission probability matrix for all states and observations.
   [[0.21052632 0.21052632 0.47368421 0.10526316]
    [0.57142857 0.         0.         0.42857143]]
 
-Converting the emission matrix to pandas DataFrame:
+Converting the emission matrix to Pandas DataFrame:
 
 .. code:: python
 

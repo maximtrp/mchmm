@@ -26,6 +26,7 @@ class MarkovChain:
         self.observed_p_matrix = np.array(obs_p)
 
 
+
     def _transition_matrix(self, seq=None, states=None):
         '''Calculate a transition frequency matrix.
 
