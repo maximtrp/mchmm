@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+__all__ = ['MarkovChain']
+
 import itertools
 import numpy as np
 import numpy.linalg as nl

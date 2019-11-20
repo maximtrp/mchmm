@@ -1,7 +1,10 @@
 # -*- coding: utf-8 -*-
+__all__ = ['HiddenMarkovModel']
+
 import itertools
 import numpy as np
 import scipy.stats as ss
+
 
 class HiddenMarkovModel:
 
