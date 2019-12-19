@@ -73,9 +73,8 @@ class HiddenMarkovModel:
             s = np.count_nonzero(seql[yid] == states[y])
             matrix[x, y] = s
 
-        matrix /= matrix.sum(axis=1)[:,None]
+        matrix /= matrix.sum(axis=1)[:, None]
         return matrix
-
 
     def _emission_matrix(self, obs_seq=None, states_seq=None, obs=None, states=None):
         '''Calculate an emission probability matrix.
@@ -98,10 +97,13 @@ class HiddenMarkovModel:
         '''
 
         _os = self.obs_seq if obs_seq is None else np.array(list(obs_seq))
-        _ss = self.states_seq if states_seq is None else np.array(list(states_seq))
+        _ss = self.states_seq if states_seq is None else np.array(
+            list(states_seq))
 
-        obs_space = np.unique(_os) if obs is None else np.sort(np.array(list(obs)))
-        states_space = np.unique(_ss) if states is None else np.sort(np.array(list(states)))
+        obs_space = np.unique(_os) if obs is None else np.sort(
+            np.array(list(obs)))
+        states_space = np.unique(_ss) if states is None else np.sort(
+            np.array(list(states)))
         k = states_space.size
         n = obs_space.size
 
@@ -112,13 +114,11 @@ class HiddenMarkovModel:
                 o = _os[_ss == states_space[i]]
                 ef[i, j] = np.count_nonzero(o == obs_space[j])
 
-        ep = ef / ef.sum(axis=1)[:,None]
+        ep = ef / ef.sum(axis=1)[:, None]
         return ep
-
 
     def from_prob(self, tp, ep, obs, states, pi=None, seed=None):
         pass
-
 
     def from_seq(self, obs_seq, states_seq, pi=None, end=None, seed=None):
         '''Analyze sequences of observations and states.
@@ -156,7 +156,6 @@ class HiddenMarkovModel:
             self.end = ss.uniform().rvs(size=self.states.size, random_state=seed)
 
         return self
-
 
     def viterbi(self, obs_seq, obs=None, states=None, tp=None, ep=None, pi=None):
         '''Viterbi algorithm.
@@ -238,7 +237,6 @@ class HiddenMarkovModel:
             x[i-1] = states[z[i-1]]
 
         return x, z
-
 
     def baum_welch(self, obs_seq, iters=100, obs=None, states=None, tp=None, ep=None,
                    pi=None, end=None):
@@ -327,7 +325,8 @@ class HiddenMarkovModel:
             beta[:, T-1] /= beta[:, T-1].sum()
 
             for i in reversed(range(T-1)):
-                beta[:, i] = np.sum(beta[:, i+1] * tp * ep[:, s(i+1)], axis=1) # i + 1
+                beta[:, i] = np.sum(beta[:, i+1] * tp *
+                                    ep[:, s(i+1)], axis=1)  # i + 1
                 beta[:, i] /= beta[:, i].sum()
 
             ksi = np.zeros((T, K, K))
@@ -340,7 +339,8 @@ class HiddenMarkovModel:
             tp /= tp.sum(axis=1)[:, None]
             gamma = ksi.sum(axis=2)
             for n, ob in enumerate(obs):
-                ep[:, n] = gamma[np.argwhere(obs_seq == ob).ravel(), :].sum(axis=0) / gamma.sum(axis=0)
+                ep[:, n] = gamma[np.argwhere(obs_seq == ob).ravel(), :].sum(
+                    axis=0) / gamma.sum(axis=0)
 
         y = np.argmax(gamma, axis=1)
         x = states[y]

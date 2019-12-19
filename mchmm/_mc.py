@@ -6,6 +6,7 @@ import numpy as np
 import numpy.linalg as nl
 import scipy.stats as ss
 
+
 class MarkovChain:
 
     def __init__(self, states=None, obs=None, obs_p=None):
@@ -26,8 +27,6 @@ class MarkovChain:
         self.states = np.array(states)
         self.observed_matrix = np.array(obs)
         self.observed_p_matrix = np.array(obs_p)
-
-
 
     def _transition_matrix(self, seq=None, states=None):
         '''Calculate a transition frequency matrix.
@@ -62,7 +61,6 @@ class MarkovChain:
 
         return matrix
 
-
     def n_order_matrix(self, mat=None, order=2):
         '''Create Nth order transition probability matrix.
 
@@ -82,7 +80,6 @@ class MarkovChain:
         '''
 
         return nl.matrix_power(self.observed_p_matrix if mat is None else mat, order)
-
 
     def prob_to_freq_matrix(self, mat=None, row_totals=None):
         '''Calculate a transition frequency matrix given a transition probability
@@ -106,7 +103,6 @@ class MarkovChain:
         _rt = self._obs_row_totals if row_totals is None else row_totals
         return _mat * _rt
 
-
     def from_data(self, seq):
         '''Infer a Markov chain from data. States, frequency and probability
         matrices are automatically calculated and assigned to as class
@@ -124,7 +120,6 @@ class MarkovChain:
             Trained MarkovChain class instance.
         '''
 
-
         # states list
         self.seq = np.array(list(seq))
         self.states = np.unique(list(seq))
@@ -134,13 +129,14 @@ class MarkovChain:
         self._obs_row_totals = np.sum(self.observed_matrix, axis=1)
 
         # observed transition probability matrix
-        self.observed_p_matrix = self.observed_matrix / self._obs_row_totals[:, None]
+        self.observed_p_matrix = self.observed_matrix / \
+            self._obs_row_totals[:, None]
 
         # expected transition frequency matrix
-        self.expected_matrix = ss.contingency.expected_freq(self.observed_matrix)
+        self.expected_matrix = ss.contingency.expected_freq(
+            self.observed_matrix)
 
         return self
-
 
     def chisquare(self, obs=None, exp=None, **kwargs):
         '''Wrapper function for carrying out a chi-squared test using
@@ -168,7 +164,6 @@ class MarkovChain:
         _obs = self.observed_matrix if obs is None else obs
         _exp = self.expected_matrix if exp is None else exp
         return ss.chisquare(f_obs=_obs, f_exp=_exp, **kwargs)
-
 
     def simulate(self, n, tf=None, states=None, start=None, ret='both', seed=None):
         '''Markov chain simulation based on `scipy.stats.multinomial`.
@@ -241,7 +236,8 @@ class MarkovChain:
         # simulation procedure
         for i in range(1, n):
             _ps = fp[seq[i-1]]
-            _sample = np.argmax(ss.multinomial.rvs(1, _ps, 1, random_state=seed))
+            _sample = np.argmax(ss.multinomial.rvs(
+                1, _ps, 1, random_state=seed))
             seq[i] = _sample
 
         if ret == 'indices':
