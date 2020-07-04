@@ -152,7 +152,7 @@ Unique states and observations are automatically inferred:
   >>> a.observations
   ['A' 'C' 'G' 'T']
 
-The transition probability matrix for all states can be accessed using `tp` attribute:
+The transition probability matrix for all states can be accessed using ``tp`` attribute:
 
 .. code:: python
 
@@ -160,7 +160,7 @@ The transition probability matrix for all states can be accessed using `tp` attr
   [[0.94444444 0.05555556]
    [0.14285714 0.85714286]]
 
-There is also `ep` attribute for the emission probability matrix for all states and observations.
+There is also ``ep`` attribute for the emission probability matrix for all states and observations.
 
 .. code:: python
 
