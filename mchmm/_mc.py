@@ -79,12 +79,16 @@ class MarkovChain:
             Nth order transition probability matrix.
         '''
 
-        return nl.matrix_power(self.observed_p_matrix if mat is None else mat, order)
+        return nl.matrix_power(
+            self.observed_p_matrix if mat is None else mat,
+            order
+        )
 
     def prob_to_freq_matrix(self, mat=None, row_totals=None):
-        '''Calculate a transition frequency matrix given a transition probability
-        matrix and row totals. This method is meant to be used to calculate a
-        frequency matrix for a Nth order transition probability matrix.
+        '''Calculate a transition frequency matrix given a transition
+        probability matrix and row totals. This method is meant to be
+        used to calculate a frequency matrix for a Nth order
+        transition probability matrix.
 
         Parameters
         ----------
@@ -165,7 +169,9 @@ class MarkovChain:
         _exp = self.expected_matrix if exp is None else exp
         return ss.chisquare(f_obs=_obs, f_exp=_exp, **kwargs)
 
-    def simulate(self, n, tf=None, states=None, start=None, ret='both', seed=None):
+    def simulate(
+        self, n, tf=None, states=None, start=None, ret='both', seed=None
+    ):
         '''Markov chain simulation based on `scipy.stats.multinomial`.
 
         Parameters
@@ -189,8 +195,8 @@ class MarkovChain:
             Return state indices if 'indices' is passed. If 'states' is passed,
             return state names. Return both if 'both' is passed.
 
-        seed : None, int, optional
-            Random state used to draw random variates. Passed to
+        seed : {None, array_like of int}
+            Random states used to draw random variates. Passed to
             `scipy.stats.multinomial` method.
 
         Returns
@@ -199,8 +205,8 @@ class MarkovChain:
             Sequence of state indices.
 
         y : numpy ndarray, optional
-            Sequence of state names. Returned if `return` arg is set to 'states'
-            or 'both'.
+            Sequence of state names.
+            Returned if `return` arg is set to 'states' or 'both'.
 
         '''
 
@@ -233,11 +239,15 @@ class MarkovChain:
         seq = np.zeros(n, dtype=np.int)
         seq[0] = _start
 
+        # random seeds
+        r_states = np.random.randint(0, n, n) if seed is None else seed
+
         # simulation procedure
         for i in range(1, n):
             _ps = fp[seq[i-1]]
-            _sample = np.argmax(ss.multinomial.rvs(
-                1, _ps, 1, random_state=seed))
+            _sample = np.argmax(
+                ss.multinomial.rvs(1, _ps, 1, random_state=r_states[i])
+            )
             seq[i] = _sample
 
         if ret == 'indices':
