@@ -122,7 +122,7 @@ Finally, let's simulate a Markov chain given our data.
 
 .. code:: python
 
-  >>> ids, states = a.simulate(10, start='A', seed=100)
+  >>> ids, states = a.simulate(10, start='A', seed=np.random.randint(0, 10, 10))
   >>> ids
   array([0, 2, 1, 0, 2, 1, 0, 2, 1, 0])
   >>> states

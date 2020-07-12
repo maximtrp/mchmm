@@ -3,7 +3,7 @@ from os.path import join, dirname
 
 setup(
     name='mchmm',
-    version='0.2.0',
+    version='0.3.0',
     description='Markov chains and Hidden Markov models',
     long_description=open(join(dirname(__file__), 'DESCRIPTION.rst')).read(),
     url='http://github.com/maximtrp/mchmm',

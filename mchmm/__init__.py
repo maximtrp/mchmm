@@ -1,4 +1,4 @@
-__version__ = "0.2.0"
+__version__ = "0.3.0"
 
-from ._hmm import * # noqa
-from ._mc import * # noqa
+from ._hmm import *  # noqa
+from ._mc import *  # noqa
