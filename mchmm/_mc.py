@@ -137,6 +137,11 @@ class MarkovChain:
             self.observed_matrix / self._obs_row_totals[:, None]
         )
 
+        # filling in a row containing zeros with uniform p values
+        uniform_p = 1 / len(self.states)
+        zero_row = np.argwhere(self.observed_p_matrix.sum(1) == 0).ravel()
+        self.observed_p_matrix[zero_row, :] = uniform_p
+
         # expected transition frequency matrix
         self.expected_matrix = ss.contingency.expected_freq(
             self.observed_matrix)
