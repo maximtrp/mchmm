@@ -151,9 +151,11 @@ class HiddenMarkovModel:
 
         if pi is None:
             self.pi = ss.uniform().rvs(size=self.states.size, random_state=seed)
+            self.pi /= self.pi.sum()
 
         if end is None:
             self.end = ss.uniform().rvs(size=self.states.size, random_state=seed)
+            self.end /= self.end.sum()
 
         return self
 
