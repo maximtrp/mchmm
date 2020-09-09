@@ -182,21 +182,18 @@ Directed graph of the hidden Markov model:
 
 .. image:: images/hmm.png
 
-Running Viterbi and Baum-Welch algorithms on new observations.
+Running Viterbi algorithm on new observations.
 
 .. code:: python
 
-  >>> new_obs = 'GGCATTGGGCTATAAGAGGAGCTTG'
+  >>> new_obs = "GGCATTGGGCTATAAGAGGAGCTTG"
   >>> vs, vsi = a.viterbi(new_obs)
-  >>> bws, bwsi = a.baum_welch(new_obs, iters=5, pi=[1,0], end=[1,0])
   >>> # states sequences obtained with both algorithms
-  >>> print(VI, "".join(vs))
-  >>> print(BW, "".join(bws))
+  >>> print("VI", "".join(vs))
   >>> # observations
-  >>> print(NO, new_obs)
+  >>> print("NO", new_obs)
 
 ::
 
   VI 0000000001111100000000000
-  BW 0000000001111111100000000
   NO GGCATTGGGCTATAAGAGGAGCTTG
