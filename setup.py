@@ -3,7 +3,7 @@ from os.path import join, dirname
 
 setup(
     name='mchmm',
-    version='0.3.2',
+    version='0.3.3',
     description='Markov chains and Hidden Markov models',
     long_description=open(join(dirname(__file__), 'DESCRIPTION.rst')).read(),
     url='http://github.com/maximtrp/mchmm',
@@ -12,7 +12,7 @@ setup(
     license='BSD',
     packages=['mchmm'],
     keywords='markov chain hidden markov models',
-    install_requires=['numpy', 'scipy'],
+    install_requires=['numpy', 'scipy', 'graphviz'],
     classifiers=[
         'Development Status :: 3 - Alpha',
 
