@@ -1,10 +1,11 @@
 # -*- coding: utf-8 -*-
 __all__ = ['MarkovChain']
 
-import itertools
 import numpy as np
 import numpy.linalg as nl
 import scipy.stats as ss
+from itertools import product
+from graphviz import Digraph
 
 
 class MarkovChain:
@@ -52,7 +53,7 @@ class MarkovChain:
             states = self.states
         matrix = np.zeros((len(states), len(states)))
 
-        for x, y in itertools.product(range(len(states)), repeat=2):
+        for x, y in product(range(len(states)), repeat=2):
             xid = np.argwhere(seql == states[x]).flatten()
             yid = xid + 1
             yid = yid[yid < len(seql)]
@@ -174,6 +175,42 @@ class MarkovChain:
         _obs = self.observed_matrix if obs is None else obs
         _exp = self.expected_matrix if exp is None else exp
         return ss.chisquare(f_obs=_obs, f_exp=_exp, **kwargs)
+
+    def graph_make(self, *args, **kwargs):
+        '''Make a directed graph of a Markov chain using `graphviz`.
+
+        Parameters
+        ----------
+        args : optional
+            Passed to the underlying `graphviz.Digraph` method.
+
+        kwargs : optional
+            Passed to the underlying `graphviz.Digraph` method.
+
+        Returns
+        -------
+        graph : graphviz.dot.Digraph
+            Digraph object with its own methods.
+
+        Note
+        ----
+        `graphviz.dot.Digraph.render` method should be used to output a file.
+        '''
+
+        self.graph = Digraph(*args, **kwargs)
+
+        ids = range(len(self.states))
+        edges = product(ids, ids)
+
+        for edge in edges:
+            v1 = edge[0]
+            v2 = edge[1]
+            s1 = self.states[v1]
+            s2 = self.states[v2]
+            p = str(np.round(self.observed_p_matrix[v1, v2], 2))
+            self.graph.edge(s1, s2, label=p, weight=p)
+
+        return self.graph
 
     def simulate(
         self, n, tf=None, states=None, start=None, ret='both', seed=None

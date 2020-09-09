@@ -16,6 +16,7 @@ mchmm
     :target: https://pypi.python.org/pypi/mchmm/
 
 *mchmm* is a Python package implementing Markov chains and Hidden Markov models in pure NumPy and SciPy.
+It can also visualize Markov chains (see below).
 
 
 Dependencies
@@ -75,7 +76,20 @@ And the observed transition *probability* matrix:
          [0.35849057, 0.09433962, 0.54716981],
          [0.13157895, 0.78947368, 0.07894737]])
 
-Here is the directed graph of the Markov chain:
+You can visualize your Markov chain. First, build a directed graph with `graph_make()` method.
+Then `render()` it. 
+
+.. code:: python
+
+  >>> graph = a.graph_make(
+        format="png",
+        graph_attr=[("rankdir", "LR")],
+        node_attr=[("fontname", "Roboto bold"), ("fontsize", "20")],
+        edge_attr=[("fontname", "Iosevka"), ("fontsize", "12")]
+      )
+  >>> graph.render()
+
+Here is the result:
 
 .. image:: images/mc.png
 
