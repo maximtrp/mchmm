@@ -235,17 +235,19 @@ Using Baum-Welch algorithm to infer the parameters of a Hidden Markov model:
     'pi': [0.009030829793043593, 0.016658391248503462, 0.0038894983546756065]
   }
 
-Inferred transition (`tp`), emission (`ep`) probability matrices and
+The inferred transition (`tp`), emission (`ep`) probability matrices and
 initial state distribution (`pi`) can be accessed as shown:
 
 .. code:: python
 
   >>> a.ep, a.tp, a.pi
 
+This model can be decoded using Viterbi algorithm:
+
 .. code:: python
 
   >>> new_obs = "GGCATTGGGCTATAAGAGGAGCTTG"
-  >>> vs, vsi = m.viterbi(new_obs)
+  >>> vs, vsi = a.viterbi(new_obs)
   >>> print("VI", "".join(vs))
   >>> print("NO", new_obs)
 
