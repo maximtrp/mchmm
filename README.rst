@@ -196,13 +196,16 @@ Directed graph of the hidden Markov model:
 
 .. image:: images/hmm.png
 
+Viterbi algorithm
+.................
+
 Running Viterbi algorithm on new observations.
 
 .. code:: python
 
   >>> new_obs = "GGCATTGGGCTATAAGAGGAGCTTG"
   >>> vs, vsi = a.viterbi(new_obs)
-  >>> # states sequences obtained with both algorithms
+  >>> # states sequence
   >>> print("VI", "".join(vs))
   >>> # observations
   >>> print("NO", new_obs)
@@ -210,4 +213,43 @@ Running Viterbi algorithm on new observations.
 ::
 
   VI 0000000001111100000000000
+  NO GGCATTGGGCTATAAGAGGAGCTTG
+
+Baum-Welch algorithm
+....................
+
+Using Baum-Welch algorithm to infer the parameters of a Hidden Markov model:
+
+.. code:: python
+
+  >>> obs_seq = 'AGACTGCATATATAAGGGGCAGGCTG'
+  >>> a = hmm.HiddenMarkovModel().from_baum_welch(obs_seq, states=['0', '1'])
+  >>> # training log: KL divergence values for all iterations
+  >>> a.log
+
+::
+
+  {
+    'tp': [0.008646969455670256, 0.0012397829805491124, 0.0003950986109761759],
+    'ep': [0.09078874423746826, 0.0022734816599056084, 0.0010118204023946836],
+    'pi': [0.009030829793043593, 0.016658391248503462, 0.0038894983546756065]
+  }
+
+Inferred transition (`tp`), emission (`ep`) probability matrices and
+initial state distribution (`pi`) can be accessed as shown:
+
+.. code:: python
+
+  >>> a.ep, a.tp, a.pi
+
+.. code:: python
+
+  >>> new_obs = "GGCATTGGGCTATAAGAGGAGCTTG"
+  >>> vs, vsi = m.viterbi(new_obs)
+  >>> print("VI", "".join(vs))
+  >>> print("NO", new_obs)
+
+::
+
+  VI 0011100001111100000001100
   NO GGCATTGGGCTATAAGAGGAGCTTG

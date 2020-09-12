@@ -8,7 +8,9 @@ import scipy.stats as ss
 
 class HiddenMarkovModel:
 
-    def __init__(self, observations=None, states=None, tp=None, ep=None, pi=None):
+    def __init__(
+        self, observations=None, states=None, tp=None, ep=None, pi=None
+    ):
         '''Hidden Markov model.
 
         Parameters
@@ -40,7 +42,7 @@ class HiddenMarkovModel:
         self.pi = np.array(pi)
 
     def _transition_matrix(self, seq=None, states=None):
-        '''Calculate a transition probability matrix which stores the transition
+        '''Calculate a transition probability matrix which stores transition
         probability of transiting from state i to state j.
 
         Parameters
@@ -76,7 +78,9 @@ class HiddenMarkovModel:
         matrix /= matrix.sum(axis=1)[:, None]
         return matrix
 
-    def _emission_matrix(self, obs_seq=None, states_seq=None, obs=None, states=None):
+    def _emission_matrix(
+        self, obs_seq=None, states_seq=None, obs=None, states=None
+    ):
         '''Calculate an emission probability matrix.
 
         Parameters
@@ -140,6 +144,11 @@ class HiddenMarkovModel:
         pi_seed : int, optional
             Random state used to draw random variates. Passed to
             `scipy.stats.uniform` method.
+
+        Returns
+        -------
+        model : object
+            Hidden Markov model learned from the given data.
         '''
 
         self.obs_seq = np.array(list(obs_seq))
@@ -150,16 +159,22 @@ class HiddenMarkovModel:
         self.ep = self._emission_matrix(self.obs_seq, self.states_seq)
 
         if pi is None:
-            self.pi = ss.uniform().rvs(size=self.states.size, random_state=seed)
+            self.pi = ss.uniform().rvs(
+                size=self.states.size, random_state=seed
+            )
             self.pi /= self.pi.sum()
 
         if end is None:
-            self.end = ss.uniform().rvs(size=self.states.size, random_state=seed)
+            self.end = ss.uniform().rvs(
+                size=self.states.size, random_state=seed
+            )
             self.end /= self.end.sum()
 
         return self
 
-    def viterbi(self, obs_seq, obs=None, states=None, tp=None, ep=None, pi=None):
+    def viterbi(
+        self, obs_seq, obs=None, states=None, tp=None, ep=None, pi=None
+    ):
         '''Viterbi algorithm.
 
         Parameters
@@ -240,8 +255,10 @@ class HiddenMarkovModel:
 
         return x, z
 
-    def baum_welch(self, obs_seq, iters=100, obs=None, states=None, tp=None, ep=None,
-                   pi=None, end=None):
+    def from_baum_welch(
+        self, obs_seq, states, thres=0.001, obs=None,
+        tp=None, ep=None, pi=None, end=None
+    ):
         '''Baum-Welch algorithm.
 
         Parameters
@@ -249,14 +266,15 @@ class HiddenMarkovModel:
         obs_seq : array_like
             Sequence of observations.
 
-        iters : int, optional
-            Number of iterations. Default is 100.
+        states : array_like, optional
+            List of states (of size K).
+
+        thres : float
+            Convergence threshold. Kullback-Leibler divergence value below
+            which model training is stopped.
 
         obs : array_like, optional
             Observations space (of size N).
-
-        states : array_like, optional
-            List of states (of size K).
 
         tp : array_like or numpy ndarray, optional
             Transition matrix (of size K × K) which stores transition
@@ -270,41 +288,33 @@ class HiddenMarkovModel:
         pi : array_like or numpy ndarray, optional
             Initial probabilities array (of size K).
 
-        end : array_like or numpy ndarray, optional
-            Terminal probabilities array (of size K).
-
         Returns
         -------
-        x : numpy ndarray
-            Sequence of states.
-
-        z : numpy ndarray
-            Sequence of state indices.
+        model : object
+            Hidden Markov model trained using Baum-Welch algorithm.
         '''
-
-        if states is None:
-            states = self.states
-
-        if tp is None:
-            tp = self.tp
-
-        if ep is None:
-            ep = self.ep
-
-        if pi:
-            pi = np.array(pi)
-        else:
-            pi = self.pi
-
-        if end:
-            end = np.array(end)
-        else:
-            end = self.end
 
         obs_seq = np.array(list(obs_seq))
 
         if obs is None:
             obs = np.unique(obs_seq)
+
+        K = len(states)
+        N = len(obs)
+
+        if tp is None:
+            tp = np.random.random((K, K))
+            tp /= tp.sum(axis=1)[:, None]
+
+        if ep is None:
+            ep = np.random.random((K, N))
+            ep /= ep.sum(axis=1)[:, None]
+
+        if pi:
+            pi = np.array(pi)
+        else:
+            pi = np.random.random(K)
+            pi /= pi.sum()
 
         T = len(obs_seq)
         K = len(states)
@@ -312,38 +322,75 @@ class HiddenMarkovModel:
         def s(i):
             return np.argwhere(obs == obs_seq[i]).flatten().item()
 
-        alpha = np.zeros((K, T))
-        beta = np.zeros((K, T))
+        alpha = np.zeros((T, K))
+        beta = np.zeros((T, K))
+        running = True
 
-        for _ in range(iters):
-            alpha[:, 0] = pi * ep[:, s(0)]
-            alpha[:, 0] /= alpha[:, 0].sum()
+        log = {
+            'tp': [], 'ep': [], 'pi': []
+        }
+
+        while running:
+            alpha[0] = pi * ep[:, s(0)]
+            alpha[0] /= alpha[0].sum()
 
             for i in range(1, T):
-                alpha[:, i] = np.sum(alpha[:, i-1] * tp, axis=1) * ep[:, s(i)]
-                alpha[:, i] /= alpha[:, i].sum()
+                alpha[i] = np.sum(alpha[i-1] * tp, axis=1) * ep[:, s(i)]
+                alpha[i] /= alpha[i].sum()
 
-            beta[:, T-1] = end * ep[:, s(T-1)]
-            beta[:, T-1] /= beta[:, T-1].sum()
+            beta[T-1] = 1
+            beta[T-1] /= beta[T-1].sum()
 
             for i in reversed(range(T-1)):
-                beta[:, i] = np.sum(beta[:, i+1] * tp *
-                                    ep[:, s(i+1)], axis=1)  # i + 1
-                beta[:, i] /= beta[:, i].sum()
+                beta[i] = np.sum(
+                    beta[i+1] * tp * ep[:, s(i+1)],
+                    axis=1
+                )  # i + 1
+                beta[i] /= beta[i].sum()
 
             ksi = np.zeros((T, K, K))
+            gamma = np.zeros((T, K))
+
             for i in range(T-1):
-                _t = alpha[:, i] * tp * beta[:, i+1] * ep[:, s(i+1)]
-                ksi[i] = _t / _t.sum()
+                ksi[i] = alpha[i] * tp * beta[i+1] * ep[:, s(i+1)]
+                ksi[i] /= ksi[i].sum()
 
-            pi = ksi[0].sum(axis=1)
-            tp = np.sum(ksi[:-1], axis=0) / ksi[:-1].sum(axis=2).sum(axis=0)
-            tp /= tp.sum(axis=1)[:, None]
-            gamma = ksi.sum(axis=2)
+                gamma[i] = alpha[i] * beta[i]
+                gamma[i] /= gamma[i].sum()
+
+            _pi = gamma[1]
+            _tp = np.sum(ksi[:-1], axis=0) / gamma[:-1].sum(axis=0)
+            _tp /= _tp.sum(axis=1)[:, None]
+            _ep = np.zeros((K, N))
+
             for n, ob in enumerate(obs):
-                ep[:, n] = gamma[np.argwhere(obs_seq == ob).ravel(), :].sum(
-                    axis=0) / gamma.sum(axis=0)
+                _ep[:, n] = gamma[
+                    np.argwhere(obs_seq == ob).ravel(), :
+                ].sum(axis=0) / gamma.sum(axis=0)
 
-        y = np.argmax(gamma, axis=1)
-        x = states[y]
-        return x, y
+            tp_entropy = ss.entropy(tp.ravel(), _tp.ravel())
+            ep_entropy = ss.entropy(ep.ravel(), _ep.ravel())
+            pi_entropy = ss.entropy(pi, _pi)
+
+            log['tp'].append(tp_entropy)
+            log['ep'].append(ep_entropy)
+            log['pi'].append(pi_entropy)
+
+            if tp_entropy < thres and\
+                    ep_entropy < thres and\
+                    pi_entropy < thres:
+                running = False
+
+            ep = _ep.copy()
+            tp = _tp.copy()
+            pi = _pi.copy()
+
+            if not running:
+                break
+
+        model = self.__class__(
+            observations=obs, states=states, tp=tp, ep=ep, pi=pi
+        )
+        model.obs_seq = obs_seq
+        model.log = log
+        return model

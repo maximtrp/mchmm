@@ -66,11 +66,9 @@ class TestMC(unittest.TestCase):
         '''Checking Baum-Welch'''
 
         obs_seq = 'AGACTGCATATATAAGGGGCAGGCTG'
-        sts_seq = '00000000111111100000000000'
-        a = hmm.HiddenMarkovModel().from_seq(obs_seq, sts_seq)
-        b = a.baum_welch(obs_seq, iters=3)
+        a = hmm.HiddenMarkovModel().from_baum_welch(obs_seq, states=['0', '1'])
         self.assertTrue(
-            isinstance(b[0], np.ndarray) and isinstance(b[1], np.ndarray)
+            isinstance(a, hmm.HiddenMarkovModel)
         )
 
 
