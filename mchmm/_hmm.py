@@ -1,9 +1,9 @@
-# -*- coding: utf-8 -*-
 __all__ = ['HiddenMarkovModel']
 
-import itertools
 import numpy as np
 import scipy.stats as ss
+from itertools import product
+from graphviz import Digraph
 
 
 class HiddenMarkovModel:
@@ -68,7 +68,7 @@ class HiddenMarkovModel:
 
         matrix = np.zeros((K, K))
 
-        for x, y in itertools.product(range(K), repeat=2):
+        for x, y in product(range(K), repeat=2):
             xid = np.argwhere(seql == states[x]).flatten()
             yid = xid + 1
             yid = yid[yid < T]
@@ -394,3 +394,66 @@ class HiddenMarkovModel:
         model.obs_seq = obs_seq
         model.log = log
         return model
+
+    def graph_make(self, *args, **kwargs):
+        '''Make a directed graph of a Hidden Markov model using `graphviz`.
+
+        Parameters
+        ----------
+        args : optional
+            Passed to the underlying `graphviz.Digraph` method.
+
+        kwargs : optional
+            Passed to the underlying `graphviz.Digraph` method.
+
+        Returns
+        -------
+        graph : graphviz.dot.Digraph
+            Digraph object with its own methods.
+
+        Note
+        ----
+        `graphviz.dot.Digraph.render` method should be used to output a file.
+        '''
+
+        self.graph = Digraph(*args, **kwargs)
+
+        self.subgraph_states = Digraph(
+            name="states",
+            node_attr=[
+                ("shape", "rect"), ("style", "filled"), ("fillcolor", "gray")
+            ]
+        )
+
+        self.subgraph_obs = Digraph(
+            name="obs", node_attr=[("shape", "circle")]
+        )
+
+        states_ids = range(len(self.states))
+        obs_ids = range(
+            len(self.states), len(self.observations) + len(self.states)
+        )
+
+        states_edges = product(states_ids, states_ids)
+        obs_edges = product(states_ids, obs_ids)
+
+        for edge in states_edges:
+            v1 = edge[0]
+            v2 = edge[1]
+            s1 = self.states[v1]
+            s2 = self.states[v2]
+            p = str(np.round(self.tp[v1, v2], 2))
+            self.subgraph_states.edge(s1, s2, label=p, weight=p)
+
+        for edge in obs_edges:
+            v1 = edge[0]
+            v2 = edge[1]
+            s1 = self.states[v1]
+            s2 = self.observations[v2-len(self.states)]
+            p = str(np.round(self.ep[v1, v2-len(self.states)], 2))
+            self.subgraph_obs.edge(s1, s2, label=p, weight=p)
+
+        self.graph.subgraph(self.subgraph_states)
+        self.graph.subgraph(self.subgraph_obs)
+
+        return self.graph
