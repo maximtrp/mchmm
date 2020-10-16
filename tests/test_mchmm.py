@@ -10,7 +10,7 @@ class TestMC(unittest.TestCase):
 
     # Markov chains tests
     def test_tfm(self):
-        """Checking transition frequency matrix"""
+        """Checking transition frequency matrix."""
         result = np.array([[0, 3, 1],
                            [1, 0, 4],
                            [3, 2, 0]])
@@ -19,7 +19,7 @@ class TestMC(unittest.TestCase):
         self.assertTrue(np.allclose(a.observed_matrix, result))
 
     def test_tpm(self):
-        """Checking transition probability matrix"""
+        """Checking transition probability matrix."""
         tfm = np.array([
             [0, 3, 1],
             [1, 0, 4],
@@ -31,7 +31,7 @@ class TestMC(unittest.TestCase):
         self.assertTrue(np.allclose(a.observed_p_matrix, result))
 
     def test_mcsim(self):
-        """Checking simulation process"""
+        """Checking simulation process."""
         a = mc.MarkovChain().from_data(self.seq)
         seed = np.random.randint(0, 15, 15)
         si, sn = a.simulate(15, start=0, ret='both', seed=seed)
@@ -42,7 +42,7 @@ class TestMC(unittest.TestCase):
 
     # HMM tests
     def test_epm(self):
-        """Checking emission probability matrix"""
+        """Checking emission probability matrix."""
         result = np.array([[0.21052632, 0.21052632, 0.47368421, 0.10526316],
                            [0.57142857, 0., 0., 0.42857143]])
 
@@ -52,7 +52,7 @@ class TestMC(unittest.TestCase):
         self.assertTrue(np.allclose(a.ep, result))
 
     def test_vit(self):
-        """Checking Viterbi"""
+        """Checking Viterbi."""
 
         obs_seq = 'AGACTGCATATATAAGGGGCAGGCTG'
         sts_seq = '00000000111111100000000000'
@@ -63,7 +63,7 @@ class TestMC(unittest.TestCase):
         )
 
     def test_bw(self):
-        """Checking Baum-Welch"""
+        """Checking Baum-Welch."""
 
         obs_seq = 'AGACTGCATATATAAGGGGCAGGCTG'
         a = hmm.HiddenMarkovModel().from_baum_welch(obs_seq, states=['0', '1'])
