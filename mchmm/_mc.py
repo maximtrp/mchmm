@@ -45,7 +45,6 @@ class MarkovChain:
         -------
         matrix : numpy ndarray
             Transition frequency matrix.
-
         '''
 
         seql = self.seq if seq is None else np.array(list(seq))
@@ -104,6 +103,7 @@ class MarkovChain:
         x : numpy ndarray
             Transition frequency matrix.
         '''
+
         _mat = self.observed_p_matrix if mat is None else mat
         _rt = self._obs_row_totals if row_totals is None else row_totals
         return _mat * _rt
@@ -172,6 +172,7 @@ class MarkovChain:
         p : float or numpy ndarray
             P value of the test.
         '''
+
         _obs = self.observed_matrix if obs is None else obs
         _exp = self.expected_matrix if exp is None else exp
         return ss.chisquare(f_obs=_obs, f_exp=_exp, **kwargs)
@@ -250,7 +251,6 @@ class MarkovChain:
         y : numpy ndarray, optional
             Sequence of state names.
             Returned if `return` arg is set to 'states' or 'both'.
-
         '''
 
         # matrices init
