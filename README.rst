@@ -8,8 +8,8 @@ mchmm
     :target: https://github.com/maximtrp/mchmm/issues
 .. image:: https://codecov.io/gh/maximtrp/mchmm/branch/master/graph/badge.svg
     :target: https://codecov.io/gh/maximtrp/mchmm
-.. image:: https://api.codacy.com/project/badge/Grade/5f11c78b10e943d7a95dae3ac72ff135
-    :target: https://www.codacy.com/app/maximtrp/mchmm?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=maximtrp/mchmm&amp;utm_campaign=Badge_Grade
+.. image:: https://app.codacy.com/project/badge/Grade/d7881a827eb9473d89aa1fc10fdd855e
+    :target: https://www.codacy.com/gh/maximtrp/mchmm/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=maximtrp/mchmm&amp;utm_campaign=Badge_Grade
 .. image:: https://pepy.tech/badge/mchmm
     :target: https://pepy.tech/project/mchmm
 .. image:: https://img.shields.io/pypi/v/mchmm.svg
