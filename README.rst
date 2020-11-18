@@ -76,8 +76,8 @@ And the observed transition *probability* matrix:
          [0.35849057, 0.09433962, 0.54716981],
          [0.13157895, 0.78947368, 0.07894737]])
 
-You can visualize your Markov chain. First, build a directed graph with `graph_make()` method.
-Then `render()` it. 
+You can visualize your Markov chain. First, build a directed graph with ``graph_make()`` method of ``MarkovChain`` object.
+Then ``render()`` it. 
 
 .. code:: python
 
@@ -195,6 +195,16 @@ Converting the emission matrix to Pandas DataFrame:
 Directed graph of the hidden Markov model:
 
 .. image:: images/hmm.png
+
+Graph can be visualized using ``graph_make`` method of ``HiddenMarkovModel`` object:
+
+.. code:: python
+
+  >>> graph = a.graph_make(
+        format="png",
+        graph_attr=[("rankdir", "LR"), ("ranksep", "1"), ("rank", "same")]
+      )
+  >>> graph.render()
 
 Viterbi algorithm
 .................
