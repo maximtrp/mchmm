@@ -15,22 +15,22 @@ class HiddenMarkovModel:
 
         Parameters
         ----------
-        observations : array_like or numpy ndarray
+        observations : array_like or numpy.ndarray
             Observations space (of size N).
 
         states : array_like
             List of states (of size K).
 
-        tp : array_like or numpy ndarray
+        tp : array_like or numpy.ndarray
             Transition matrix of size K × K which stores transition
             probability of transiting from state i (row) to state j (col).
 
-        ep : array_like or numpy ndarray
+        ep : array_like or numpy.ndarray
             Emission matrix of size K × N which stores probability of
             seeing observation j (col) from state i (row). N is the length of
             observation space O = {o_1, o_2, ..., o_N}.
 
-        pi : array_like or numpy ndarray
+        pi : array_like or numpy.ndarray
             Initial state probabilities array (of size K).
 
         '''
@@ -55,7 +55,7 @@ class HiddenMarkovModel:
 
         Returns
         -------
-        matrix : numpy ndarray
+        matrix : numpy.ndarray
             Transition frequency matrix.
 
         '''
@@ -95,7 +95,7 @@ class HiddenMarkovModel:
 
         Returns
         -------
-        ep : numpy ndarray
+        ep : numpy.ndarray
             Emission probability matrix of size K × N.
 
         '''
@@ -121,8 +121,38 @@ class HiddenMarkovModel:
         ep = ef / ef.sum(axis=1)[:, None]
         return ep
 
-    def from_prob(self, tp, ep, obs, states, pi=None, seed=None):
-        pass
+    def from_prob(self, tp, ep, observations, states, pi=None):
+        '''Initialize hidden Markov model from known probabilities.
+
+        Parameters
+        ----------
+
+        tp : array_like or numpy.ndarray
+            Transition matrix of size K × K which stores transition
+            probability of transiting from state i (row) to state j (col).
+
+        ep : array_like or numpy.ndarray
+            Emission matrix of size K × N which stores probability of
+            seeing observation j (col) from state i (row). N is the length of
+            observation space O = {o_1, o_2, ..., o_N}.
+
+        observations : array_like or numpy.ndarray
+            Observations space (of size N).
+
+        states : array_like
+            List of states (of size K).
+
+        pi : array_like or numpy.ndarray
+            Initial state probabilities array (of size K).
+
+        '''
+
+        self.observations = np.array(observations)
+        self.states = np.array(states)
+        self.tp = np.array(tp)
+        self.ep = np.array(ep)
+        self.pi = np.array(pi)
+        return self
 
     def from_seq(self, obs_seq, states_seq, pi=None, end=None, seed=None):
         '''Analyze sequences of observations and states.
@@ -137,7 +167,7 @@ class HiddenMarkovModel:
             Sequence of states (of size T).
             State space = {s_1, s_2, ..., s_K}.
 
-        pi : None, array_like or numpy ndarray, optional
+        pi : None, array_like or numpy.ndarray, optional
             Initial state probabilities array (of size K). If None, array is
             sampled from a uniform distribution.
 
@@ -188,24 +218,24 @@ class HiddenMarkovModel:
         states : array_like, optional
             List of states (of size K).
 
-        tp : array_like or numpy ndarray, optional
+        tp : array_like or numpy.ndarray, optional
             Transition matrix (of size K × K) which stores transition
             probability of transiting from state i (row) to state j (col).
 
-        ep : array_like or numpy ndarray, optional
+        ep : array_like or numpy.ndarray, optional
             Emission matrix (of size K × N) which stores probability of
             seeing observation j (col) from state i (row). N is the length of
             observation space, O = {o_1, o_2, ..., o_N}.
 
-        pi : array_like or numpy ndarray, optional
+        pi : array_like or numpy.ndarray, optional
             Initial probabilities array (of size K).
 
         Returns
         -------
-        x : numpy ndarray
+        x : numpy.ndarray
             Sequence of states.
 
-        z : numpy ndarray
+        z : numpy.ndarray
             Sequence of state indices.
         '''
 
@@ -276,16 +306,16 @@ class HiddenMarkovModel:
         obs : array_like, optional
             Observations space (of size N).
 
-        tp : array_like or numpy ndarray, optional
+        tp : array_like or numpy.ndarray, optional
             Transition matrix (of size K × K) which stores transition
             probability of transiting from state i (row) to state j (col).
 
-        ep : array_like or numpy ndarray, optional
+        ep : array_like or numpy.ndarray, optional
             Emission matrix (of size K × N) which stores probability of
             seeing observation j (col) from state i (row). N is the length of
             observation space, O = {o_1, o_2, ..., o_N}.
 
-        pi : array_like or numpy ndarray, optional
+        pi : array_like or numpy.ndarray, optional
             Initial probabilities array (of size K).
 
         Returns
