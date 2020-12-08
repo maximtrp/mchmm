@@ -121,39 +121,6 @@ class HiddenMarkovModel:
         ep = ef / ef.sum(axis=1)[:, None]
         return ep
 
-    def from_prob(self, tp, ep, observations, states, pi=None):
-        '''Initialize hidden Markov model from known probabilities.
-
-        Parameters
-        ----------
-
-        tp : array_like or numpy.ndarray
-            Transition matrix of size K × K which stores transition
-            probability of transiting from state i (row) to state j (col).
-
-        ep : array_like or numpy.ndarray
-            Emission matrix of size K × N which stores probability of
-            seeing observation j (col) from state i (row). N is the length of
-            observation space O = {o_1, o_2, ..., o_N}.
-
-        observations : array_like or numpy.ndarray
-            Observations space (of size N).
-
-        states : array_like
-            List of states (of size K).
-
-        pi : array_like or numpy.ndarray
-            Initial state probabilities array (of size K).
-
-        '''
-
-        self.observations = np.array(observations)
-        self.states = np.array(states)
-        self.tp = np.array(tp)
-        self.ep = np.array(ep)
-        self.pi = np.array(pi)
-        return self
-
     def from_seq(self, obs_seq, states_seq, pi=None, end=None, seed=None):
         '''Analyze sequences of observations and states.
 
