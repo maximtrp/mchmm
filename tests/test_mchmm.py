@@ -2,6 +2,7 @@ import mchmm._mc as mc
 import mchmm._hmm as hmm
 import numpy as np
 import unittest
+from graphviz import Digraph
 
 
 class TestMC(unittest.TestCase):
@@ -35,10 +36,22 @@ class TestMC(unittest.TestCase):
         a = mc.MarkovChain().from_data(self.seq)
         seed = np.random.randint(0, 15, 15)
         si, sn = a.simulate(15, start=0, ret='both', seed=seed)
-        si2 = a.simulate(15, start=0, ret='indices', seed=seed)
-        sn2 = a.simulate(15, start=0, ret='states', seed=seed)
-
+        si2 = a.simulate(15, tf=a.observed_matrix, start=0, ret='indices', seed=seed)
+        sn2 = a.simulate(15, start=0, states=['A', 'B', 'C'], ret='states', seed=seed)
+        si3, sn3 = a.simulate(15, start='A', ret='both', seed=seed)
+        si4, sn4 = a.simulate(15, start='B', ret='both', seed=seed)
+        si5, sn5 = a.simulate(15, ret='both', seed=seed)
+        
         self.assertTrue(np.allclose(si, si2) and np.all(sn == sn2))
+        self.assertTrue(np.allclose(si, si3) and np.all(sn == sn3))
+        self.assertTrue(np.allclose(si4, si5) and np.all(sn4 == sn5))
+
+    def test_graph(self):
+        """Checking graphing process."""
+        a = mc.MarkovChain().from_data(self.seq)
+        graph = a.graph_make()
+
+        self.assertTrue(isinstance(graph, Digraph))
 
     # HMM tests
     def test_epm(self):

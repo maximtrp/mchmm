@@ -231,9 +231,9 @@ class MarkovChain:
             List of state names. If None, `self.states` attribute is used.
 
         start : {None, 'random', str, or int}, optional
-            Event to begin with. If `int`, choosed a state by index. If `str`,
-            choosed by a state name. If 'random', take a random state. If
-            `None`, start with an event with maximum probability.
+            Event to begin with. If `int`, the state is chosen by index. If
+            `str`, the state is chosen by name. If 'random', a random state is
+            taken. If `None`, an event with maximum probability is chosen.
 
         ret : {'indices', 'states', 'both'}
             Return state indices if 'indices' is passed. If 'states' is passed,
@@ -274,7 +274,7 @@ class MarkovChain:
         elif isinstance(start, int):
             _start = start if start < len(states) else len(states)-1
         elif isinstance(start, str):
-            _start = np.argwhere(states == start)
+            _start = np.argwhere(states == start).item()
         elif start == 'random':
             _start = np.random.randint(0, len(states))
 
