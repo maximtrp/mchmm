@@ -2,8 +2,8 @@
 mchmm
 =====
 
-.. image:: https://travis-ci.org/maximtrp/mchmm.svg?branch=master
-    :target: https://travis-ci.org/maximtrp/mchmm
+.. image:: https://img.shields.io/circleci/build/github/maximtrp/mchmm
+    :alt: CircleCI
 .. image:: https://img.shields.io/github/issues/maximtrp/mchmm.svg
     :target: https://github.com/maximtrp/mchmm/issues
 .. image:: https://codecov.io/gh/maximtrp/mchmm/branch/master/graph/badge.svg

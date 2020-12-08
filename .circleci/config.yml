@@ -16,7 +16,10 @@ jobs:
           pypi-cache: false
       - run:
           command: coverage run --source mchmm setup.py test
-          name: Test
+          name: Coverage
+      - run:
+          command: codecov
+          name: Codecov
 
 workflows:
   main:
