@@ -3,7 +3,7 @@ mchmm
 =====
 
 .. image:: https://img.shields.io/circleci/build/github/maximtrp/mchmm
-    :alt: CircleCI
+    :target: https://app.circleci.com/
 .. image:: https://img.shields.io/github/issues/maximtrp/mchmm.svg
     :target: https://github.com/maximtrp/mchmm/issues
 .. image:: https://codecov.io/gh/maximtrp/mchmm/branch/master/graph/badge.svg
