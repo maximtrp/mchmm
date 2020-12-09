@@ -215,10 +215,7 @@ class HiddenMarkovModel:
         if ep is None:
             ep = self.ep
 
-        if pi is None:
-            pi = self.pi
-        else:
-            pi = np.array(pi)
+        pi = self.pi if pi is None else np.array(pi)
 
         obs_seq = np.array(list(obs_seq))
 
@@ -307,11 +304,8 @@ class HiddenMarkovModel:
             ep = np.random.random((K, N))
             ep /= ep.sum(axis=1)[:, None]
 
-        if pi:
-            pi = np.array(pi)
-        else:
-            pi = np.random.random(K)
-            pi /= pi.sum()
+        pi = np.array(pi) if pi else np.random.random(K)
+        pi /= pi.sum()
 
         T = len(obs_seq)
         K = len(states)

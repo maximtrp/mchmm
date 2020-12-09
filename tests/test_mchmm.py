@@ -19,6 +19,11 @@ class TestMC(unittest.TestCase):
         a = mc.MarkovChain().from_data(self.seq)
         self.assertTrue(np.allclose(a.observed_matrix, result))
 
+    def test_prf(self):
+        """Checking prob_to_freq method."""
+        a = mc.MarkovChain().from_data(self.seq)
+        self.assertTrue(np.allclose(a.prob_to_freq_matrix(), a.observed_matrix))
+
     def test_tpm(self):
         """Checking transition probability matrix."""
         tfm = np.array([
@@ -30,6 +35,12 @@ class TestMC(unittest.TestCase):
 
         a = mc.MarkovChain().from_data(self.seq)
         self.assertTrue(np.allclose(a.observed_p_matrix, result))
+
+    def test_nom(self):
+        """Checking raising a matrix to power N."""
+        a = mc.MarkovChain().from_data(self.seq)
+        a2 = a.n_order_matrix()
+        self.assertTrue(np.allclose(a2, a.observed_p_matrix @ a.observed_p_matrix))
 
     def test_mcsim(self):
         """Checking simulation process."""
@@ -46,11 +57,10 @@ class TestMC(unittest.TestCase):
         self.assertTrue(np.allclose(si, si3) and np.all(sn == sn3))
         self.assertTrue(np.allclose(si4, si5) and np.all(sn4 == sn5))
 
-    def test_graph(self):
-        """Checking graphing process."""
+    def test_mcgraph(self):
+        """Checking graphing process for MC."""
         a = mc.MarkovChain().from_data(self.seq)
         graph = a.graph_make()
-
         self.assertTrue(isinstance(graph, Digraph))
 
     # HMM tests
@@ -83,6 +93,14 @@ class TestMC(unittest.TestCase):
         self.assertTrue(
             isinstance(a, hmm.HiddenMarkovModel)
         )
+
+    def test_hmmgraph(self):
+        """Checking graphing process for HMM."""
+        obs_seq = 'AGACTGCATATATAAGGGGCAGGCTG'
+        sts_seq = '00000000111111100000000000'
+        a = hmm.HiddenMarkovModel().from_seq(obs_seq, sts_seq)
+        graph = a.graph_make()
+        self.assertTrue(isinstance(graph, Digraph))
 
 
 if __name__ == '__main__':

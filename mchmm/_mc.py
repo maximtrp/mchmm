@@ -15,13 +15,13 @@ class MarkovChain:
 
         Parameters
         ----------
-        states : array_like or numpy ndarray
+        states : array_like or numpy.ndarray
             State names list.
 
-        obs : array_like or numpy ndarray
+        obs : array_like or numpy.ndarray
             Observed transition frequency matrix.
 
-        obs_p : array_like or numpy ndarray
+        obs_p : array_like or numpy.ndarray
             Observed transition probability matrix.
         '''
 
@@ -38,12 +38,12 @@ class MarkovChain:
             A string or an array-like object exposing the array interface and
             containing strings or ints.
 
-        states : numpy ndarray
+        states : numpy.ndarray
             Array containing a list of states.
 
         Returns
         -------
-        matrix : numpy ndarray
+        matrix : numpy.ndarray
             Transition frequency matrix.
         '''
 
@@ -66,7 +66,7 @@ class MarkovChain:
 
         Parameters
         ----------
-        mat : numpy ndarray
+        mat : numpy.ndarray
             Observed transition probability matrix.
 
         order : int, optional
@@ -75,7 +75,7 @@ class MarkovChain:
 
         Returns
         -------
-        x : numpy ndarray
+        x : numpy.ndarray
             Nth order transition probability matrix.
         '''
 
@@ -92,20 +92,21 @@ class MarkovChain:
 
         Parameters
         ----------
-        mat : numpy ndarray
+        mat : numpy.ndarray
             Transition probability matrix.
 
-        row_totals : numpy ndarray
+        row_totals : numpy.ndarray
             Row totals of transition frequency matrix.
 
         Returns
         -------
-        x : numpy ndarray
+        x : numpy.ndarray
             Transition frequency matrix.
         '''
 
         _mat = self.observed_p_matrix if mat is None else mat
         _rt = self._obs_row_totals if row_totals is None else row_totals
+        _rt = _rt[:, None] if _rt.ndim == 1 else _rt
         return _mat * _rt
 
     def from_data(self, seq):
@@ -115,7 +116,7 @@ class MarkovChain:
 
         Parameters
         ----------
-        seq : numpy ndarray, array_like, str
+        seq : numpy.ndarray, array_like, str
             Sequence of events. A string or an array-like object exposing the
             array interface and containing strings or ints.
 
@@ -130,7 +131,7 @@ class MarkovChain:
         self.states = np.unique(list(seq))
 
         # observed transition frequency matrix
-        self.observed_matrix = self._transition_matrix(seq, self.states)
+        self.observed_matrix = self._transition_matrix(seq)
         self._obs_row_totals = np.sum(self.observed_matrix, axis=1)
 
         # observed transition probability matrix
@@ -155,10 +156,10 @@ class MarkovChain:
 
         Parameters
         ----------
-        obs : numpy ndarray
+        obs : numpy.ndarray
             Observed transition frequency matrix.
 
-        exp : numpy ndarray
+        exp : numpy.ndarray
             Expected transition frequency matrix.
 
         kwargs : optional
@@ -166,10 +167,10 @@ class MarkovChain:
 
         Returns
         -------
-        chisq : float or numpy ndarray
+        chisq : float or numpy.ndarray
             Chi-squared test statistic.
 
-        p : float or numpy ndarray
+        p : float or numpy.ndarray
             P value of the test.
         '''
 
@@ -223,7 +224,7 @@ class MarkovChain:
         n : int
             Number of states to simulate.
 
-        tf : numpy ndarray
+        tf : numpy.ndarray
             Transition frequency matrix. If None, `self.observed_matrix`
             attribute is used.
 
@@ -245,10 +246,10 @@ class MarkovChain:
 
         Returns
         -------
-        x : numpy ndarray
+        x : numpy.ndarray
             Sequence of state indices.
 
-        y : numpy ndarray, optional
+        y : numpy.ndarray, optional
             Sequence of state names.
             Returned if `return` arg is set to 'states' or 'both'.
         '''
@@ -273,10 +274,10 @@ class MarkovChain:
             _start = np.argmax(row_totals / tf.sum())
         elif isinstance(start, int):
             _start = start if start < len(states) else len(states)-1
-        elif isinstance(start, str):
-            _start = np.argwhere(states == start).item()
         elif start == 'random':
             _start = np.random.randint(0, len(states))
+        elif isinstance(start, str):
+            _start = np.argwhere(states == start).item()
 
         # simulated sequence init
         seq = np.zeros(n, dtype=np.int)
