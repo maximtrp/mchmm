@@ -30,7 +30,7 @@ class TestMC(unittest.TestCase):
             [0, 3, 1],
             [1, 0, 4],
             [3, 2, 0]
-        ], dtype=np.float)
+        ], dtype=float)
         result = tfm / tfm.sum(axis=1)[:, None]
 
         a = mc.MarkovChain().from_data(self.seq)

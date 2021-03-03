@@ -1,0 +1,20 @@
+digraph mc {
+    node [fontname="Roboto bold", fontsize=20, shape=circle];
+    rankdir = LR;
+    A B C;
+    
+    edge [fontname="Iosevka", fontsize=12];
+
+    A -> A [label = "0.22", weight=0.22];
+    A -> B [label = "0.56", weight=0.56];
+    A -> C [label = "0.22", weight=0.22];
+
+    B -> A [label = "0.36", weight=0.36];
+    B -> B [label = "0.09", weight=0.09];
+    B -> C [label = "0.55", weight=0.55];
+
+    C -> A [label = "0.13", weight=0.13];
+    C -> B [label = "0.79", weight=0.79];
+    C -> C [label = "0.08", weight=0.08];
+
+}

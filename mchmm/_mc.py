@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 __all__ = ['MarkovChain']
 
 import numpy as np
@@ -280,7 +279,7 @@ class MarkovChain:
             _start = np.argwhere(states == start).item()
 
         # simulated sequence init
-        seq = np.zeros(n, dtype=np.int)
+        seq = np.zeros(n, dtype=int)
         seq[0] = _start
 
         # random seeds
