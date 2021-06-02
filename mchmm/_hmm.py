@@ -4,35 +4,39 @@ import numpy as np
 import scipy.stats as ss
 from itertools import product
 from graphviz import Digraph
+from typing import Union, Tuple, Optional
 
 
 class HiddenMarkovModel:
 
     def __init__(
-        self, observations=None, states=None, tp=None, ep=None, pi=None
-    ):
+            self,
+            observations: Optional[Union[list, np.ndarray]] = None,
+            states: Optional[Union[list, np.ndarray]] = None,
+            tp: Optional[Union[list, np.ndarray]] = None,
+            ep: Optional[Union[list, np.ndarray]] = None,
+            pi: Optional[Union[list, np.ndarray]] = None):
         '''Hidden Markov model.
 
         Parameters
         ----------
-        observations : array_like or numpy.ndarray
+        observations : Optional[Union[list, np.ndarray]]
             Observations space (of size N).
 
-        states : array_like
+        states : Optional[Union[list, np.ndarray]]
             List of states (of size K).
 
-        tp : array_like or numpy.ndarray
+        tp : Optional[Union[list, np.ndarray]]
             Transition matrix of size K × K which stores transition
             probability of transiting from state i (row) to state j (col).
 
-        ep : array_like or numpy.ndarray
+        ep : Optional[Union[list, np.ndarray]]
             Emission matrix of size K × N which stores probability of
             seeing observation j (col) from state i (row). N is the length of
-            observation space O = {o_1, o_2, ..., o_N}.
+            observation space O = [o_1, o_2, ..., o_N].
 
-        pi : array_like or numpy.ndarray
+        pi : Optional[Union[list, np.ndarray]]
             Initial state probabilities array (of size K).
-
         '''
 
         self.observations = np.array(observations)
@@ -41,25 +45,26 @@ class HiddenMarkovModel:
         self.ep = np.array(ep)
         self.pi = np.array(pi)
 
-    def _transition_matrix(self, seq=None, states=None):
+    def _transition_matrix(
+            self,
+            seq: Optional[Union[str, np.ndarray, list]] = None,
+            states: Optional[Union[str, np.ndarray, list]] = None):
         '''Calculate a transition probability matrix which stores transition
         probability of transiting from state i to state j.
 
         Parameters
         ----------
-        seq : str or array_like
+        seq : Optional[Union[str, numpy.ndarray, list]]
             Sequence of states.
 
-        states : array_like
+        states : Optional[Union[str, numpy.ndarray, list]]
             List of unique states.
 
         Returns
         -------
         matrix : numpy.ndarray
             Transition frequency matrix.
-
         '''
-
         seql = self.states_seq if seq is None else np.array(list(seq))
         if states is None:
             states = self.states
@@ -79,27 +84,29 @@ class HiddenMarkovModel:
         return matrix
 
     def _emission_matrix(
-        self, obs_seq=None, states_seq=None, obs=None, states=None
-    ):
+            self,
+            obs_seq: Optional[Union[str, list, np.ndarray]] = None,
+            states_seq: Optional[Union[str, list, np.ndarray]] = None,
+            obs: Optional[Union[str, list, np.ndarray]] = None,
+            states: Optional[Union[str, list, np.ndarray]] = None
+            ) -> np.ndarray:
         '''Calculate an emission probability matrix.
 
         Parameters
         ----------
         obs_seq : str or array_like
-            Sequence of observations (of size T).
-            Observation space = {o_1, o_2, ..., o_N}.
+            Sequence of observations (of size N).
+            Observation space = [o_1, o_2, ..., o_N].
 
         states_seq : str or array_like
-            Sequence of states (of size T).
-            State space = {s_1, s_2, ..., s_K}.
+            Sequence of states (of size K).
+            State space = [s_1, s_2, ..., s_K].
 
         Returns
         -------
         ep : numpy.ndarray
             Emission probability matrix of size K × N.
-
         '''
-
         _os = self.obs_seq if obs_seq is None else np.array(list(obs_seq))
         _ss = self.states_seq if states_seq is None else np.array(
             list(states_seq))
@@ -121,30 +128,40 @@ class HiddenMarkovModel:
         ep = ef / ef.sum(axis=1)[:, None]
         return ep
 
-    def from_seq(self, obs_seq, states_seq, pi=None, end=None, seed=None):
+    def from_seq(
+            self,
+            obs_seq: Union[str, list, np.ndarray],
+            states_seq: Union[str, list, np.ndarray],
+            pi: Optional[Union[str, list, np.ndarray]] = None,
+            end: Optional[Union[str, list, np.ndarray]] = None,
+            seed: Optional[int] = None) -> object:
         '''Analyze sequences of observations and states.
 
         Parameters
         ----------
-        obs_seq : str or array_like
-            Sequence of observations (of size T).
-            Observation space = {o_1, o_2, ..., o_N}.
+        obs_seq : Union[str, list, numpy.ndarray]
+            Sequence of observations (of size N).
+            Observation space, O = [o_1, o_2, ..., o_N].
 
-        states_seq : str or array_like
-            Sequence of states (of size T).
-            State space = {s_1, s_2, ..., s_K}.
+        states_seq : Union[str, list, numpy.ndarray]
+            Sequence of states (of size K).
+            State space = [s_1, s_2, ..., s_K].
 
-        pi : None, array_like or numpy.ndarray, optional
-            Initial state probabilities array (of size K). If None, array is
-            sampled from a uniform distribution.
+        pi : Optional[Union[str, list, numpy.ndarray]]
+            Initial state probabilities array (of size K).
+            If None, array is sampled from a uniform distribution.
 
-        pi_seed : int, optional
+        end : Optional[Union[str, list, numpy.ndarray]]
+            Initial state probabilities array (of size K).
+            If None, array is sampled from a uniform distribution.
+
+        seed : Optional[int]
             Random state used to draw random variates. Passed to
             `scipy.stats.uniform` method.
 
         Returns
         -------
-        model : object
+        model : HiddenMarkovModel
             Hidden Markov model learned from the given data.
         '''
 
@@ -170,31 +187,37 @@ class HiddenMarkovModel:
         return self
 
     def viterbi(
-        self, obs_seq, obs=None, states=None, tp=None, ep=None, pi=None
-    ):
+            self,
+            obs_seq: Union[str, list, np.ndarray],
+            obs: Optional[Union[list, np.ndarray]] = None,
+            states: Optional[Union[list, np.ndarray]] = None,
+            tp: Optional[np.ndarray] = None,
+            ep: Optional[np.ndarray] = None,
+            pi: Optional[Union[list, np.ndarray]] = None
+            ) -> Tuple[np.ndarray, np.ndarray]:
         '''Viterbi algorithm.
 
         Parameters
         ----------
-        obs_seq : array_like
+        obs_seq : Union[str, list, np.ndarray]
             Sequence of observations.
 
-        obs : array_like, optional
+        obs : Optional[Union[list, np.ndarray]]
             Observations space (of size N).
 
-        states : array_like, optional
+        states : Optional[Union[list, np.ndarray]]
             List of states (of size K).
 
-        tp : array_like or numpy.ndarray, optional
+        tp : Optional[numpy.ndarray]
             Transition matrix (of size K × K) which stores transition
             probability of transiting from state i (row) to state j (col).
 
-        ep : array_like or numpy.ndarray, optional
+        ep : Optional[numpy.ndarray]
             Emission matrix (of size K × N) which stores probability of
             seeing observation j (col) from state i (row). N is the length of
-            observation space, O = {o_1, o_2, ..., o_N}.
+            observation space, O = [o_1, o_2, ..., o_N].
 
-        pi : array_like or numpy.ndarray, optional
+        pi : Optional[Union[list, np.ndarray]]
             Initial probabilities array (of size K).
 
         Returns
@@ -205,7 +228,6 @@ class HiddenMarkovModel:
         z : numpy.ndarray
             Sequence of state indices.
         '''
-
         if states is None:
             states = self.states
 
@@ -250,44 +272,48 @@ class HiddenMarkovModel:
         return x, z
 
     def from_baum_welch(
-        self, obs_seq, states, thres=0.001, obs=None,
-        tp=None, ep=None, pi=None, end=None
-    ):
+            self,
+            obs_seq: Union[str, list, np.ndarray],
+            states: Optional[Union[list, np.ndarray]] = None,
+            thres: Optional[float] = 0.001,
+            obs: Optional[Union[str, list, np.ndarray]] = None,
+            tp: Optional[np.ndarray] = None,
+            ep: Optional[np.ndarray] = None,
+            pi: Optional[Union[list, np.ndarray]] = None) -> object:
         '''Baum-Welch algorithm.
 
         Parameters
         ----------
-        obs_seq : array_like
+        obs_seq : Union[str, list, numpy.ndarray]
             Sequence of observations.
 
-        states : array_like, optional
+        states : Optional[Union[list, numpy.ndarray]]
             List of states (of size K).
 
-        thres : float
+        thres : Optional[float]
             Convergence threshold. Kullback-Leibler divergence value below
             which model training is stopped.
 
-        obs : array_like, optional
+        obs : Optional[Union[list, numpy.ndarray]]
             Observations space (of size N).
 
-        tp : array_like or numpy.ndarray, optional
+        tp : Optional[numpy.ndarray]
             Transition matrix (of size K × K) which stores transition
             probability of transiting from state i (row) to state j (col).
 
-        ep : array_like or numpy.ndarray, optional
+        ep : Optional[numpy.ndarray]
             Emission matrix (of size K × N) which stores probability of
             seeing observation j (col) from state i (row). N is the length of
             observation space, O = {o_1, o_2, ..., o_N}.
 
-        pi : array_like or numpy.ndarray, optional
+        pi : Optional[Union[list, numpy.ndarray]]
             Initial probabilities array (of size K).
 
         Returns
         -------
-        model : object
+        HiddenMarkovModel
             Hidden Markov model trained using Baum-Welch algorithm.
         '''
-
         obs_seq = np.array(list(obs_seq))
 
         if obs is None:
@@ -295,6 +321,7 @@ class HiddenMarkovModel:
 
         K = len(states)
         N = len(obs)
+        T = len(obs_seq)
 
         if tp is None:
             tp = np.random.random((K, K))
@@ -306,9 +333,6 @@ class HiddenMarkovModel:
 
         pi = np.array(pi) if pi else np.random.random(K)
         pi /= pi.sum()
-
-        T = len(obs_seq)
-        K = len(states)
 
         def s(i):
             return np.argwhere(obs == obs_seq[i]).flatten().item()
@@ -386,16 +410,17 @@ class HiddenMarkovModel:
         model.log = log
         return model
 
-    def graph_make(self, *args, **kwargs):
+    def graph_make(self, *args, **kwargs) -> Digraph:
         '''Make a directed graph of a Hidden Markov model using `graphviz`.
 
         Parameters
         ----------
         args : optional
-            Passed to the underlying `graphviz.Digraph` method.
+            Arguments passed to the underlying `graphviz.Digraph` method.
 
         kwargs : optional
-            Passed to the underlying `graphviz.Digraph` method.
+            Keyword arguments passed to the underlying `graphviz.Digraph`
+            method.
 
         Returns
         -------
@@ -406,7 +431,6 @@ class HiddenMarkovModel:
         ----
         `graphviz.dot.Digraph.render` method should be used to output a file.
         '''
-
         self.graph = Digraph(*args, **kwargs)
 
         self.subgraph_states = Digraph(
