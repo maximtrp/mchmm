@@ -1,3 +1,2 @@
-numpy
-scipy
-graphviz
+sphinx_rtd_theme
+git+git://github.com/maximtrp/mchmm
