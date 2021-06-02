@@ -4,6 +4,9 @@ mchmm
 
 .. image:: https://img.shields.io/circleci/build/github/maximtrp/mchmm
     :target: https://app.circleci.com/
+.. image:: https://readthedocs.org/projects/mchmm/badge/?version=latest
+    :target: https://mchmm.readthedocs.io/en/latest/?badge=latest
+    :alt: Documentation Status
 .. image:: https://img.shields.io/github/issues/maximtrp/mchmm.svg
     :target: https://github.com/maximtrp/mchmm/issues
 .. image:: https://codecov.io/gh/maximtrp/mchmm/branch/master/graph/badge.svg
