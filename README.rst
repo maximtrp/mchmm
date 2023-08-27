@@ -13,7 +13,7 @@ mchmm
     :target: https://codecov.io/gh/maximtrp/mchmm
 .. image:: https://app.codacy.com/project/badge/Grade/d7881a827eb9473d89aa1fc10fdd855e
     :target: https://www.codacy.com/gh/maximtrp/mchmm/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=maximtrp/mchmm&amp;utm_campaign=Badge_Grade
-.. image:: https://pepy.tech/badge/mchmm
+.. image:: https://static.pepy.tech/badge/mchmm
     :target: https://pepy.tech/project/mchmm
 .. image:: https://img.shields.io/pypi/v/mchmm.svg
     :target: https://pypi.python.org/pypi/mchmm/
