@@ -1,2 +1,2 @@
 sphinx_rtd_theme
-git+git://github.com/maximtrp/mchmm
+git+https://github.com/maximtrp/mchmm
