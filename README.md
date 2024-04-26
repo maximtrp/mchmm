@@ -84,7 +84,7 @@ graph.render()
 
 Here is the result:
 
-![images/mc.png](Markov Chain)
+![Markov Chain](images/mc.png)
 
 Pandas can help us annotate columns and rows:
 
@@ -185,7 +185,7 @@ pd.DataFrame(a.ep, index=a.states, columns=a.observations)
 
 Directed graph of the hidden Markov model:
 
-![images/hmm.png](Hidden Markov Model)
+![Hidden Markov Model](images/hmm.png)
 
 Graph can be visualized using `graph_make` method of `HiddenMarkovModel` object:
 
