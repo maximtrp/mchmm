@@ -1,4 +1,4 @@
-__all__ = ['MarkovChain']
+__all__ = ["MarkovChain"]
 import numpy as np
 import numpy.linalg as nl
 import scipy.stats as ss
@@ -8,13 +8,13 @@ from typing import Union, Tuple, Optional
 
 
 class MarkovChain:
-
     def __init__(
-            self,
-            states: Optional[Union[np.ndarray, list]] = None,
-            obs: Optional[Union[np.ndarray, list]] = None,
-            obs_p: Optional[Union[np.ndarray, list]] = None):
-        '''Discrete Markov Chain.
+        self,
+        states: Optional[Union[np.ndarray, list]] = None,
+        obs: Optional[Union[np.ndarray, list]] = None,
+        obs_p: Optional[Union[np.ndarray, list]] = None,
+    ):
+        """Discrete Markov Chain.
 
         Parameters
         ----------
@@ -26,18 +26,18 @@ class MarkovChain:
 
         obs_p : Optional[Union[numpy.ndarray, list]
             Observed transition probability matrix.
-        '''
+        """
 
         self.states = np.array(states)
         self.observed_matrix = np.array(obs)
         self.observed_p_matrix = np.array(obs_p)
 
     def _transition_matrix(
-            self,
-            seq: Optional[Union[str, list, np.ndarray]] = None,
-            states: Optional[Union[str, list, np.ndarray]] = None
-            ) -> np.ndarray:
-        '''Calculate a transition frequency matrix.
+        self,
+        seq: Optional[Union[str, list, np.ndarray]] = None,
+        states: Optional[Union[str, list, np.ndarray]] = None,
+    ) -> np.ndarray:
+        """Calculate a transition frequency matrix.
 
         Parameters
         ----------
@@ -51,7 +51,7 @@ class MarkovChain:
         -------
         matrix : numpy.ndarray
             Transition frequency matrix.
-        '''
+        """
 
         seql = self.seq if seq is None else np.array(list(seq))
         states = self.states if states is None else np.array(list(states))
@@ -67,10 +67,9 @@ class MarkovChain:
         return matrix
 
     def n_order_matrix(
-            self,
-            mat: np.ndarray = None,
-            order: int = 2) -> np.ndarray:
-        '''Create Nth order transition probability matrix.
+        self, mat: Optional[np.ndarray] = None, order: int = 2
+    ) -> np.ndarray:
+        """Create Nth order transition probability matrix.
 
         Parameters
         ----------
@@ -85,18 +84,14 @@ class MarkovChain:
         -------
         x : numpy.ndarray
             Nth order transition probability matrix.
-        '''
+        """
 
-        return nl.matrix_power(
-            self.observed_p_matrix if mat is None else mat,
-            order
-        )
+        return nl.matrix_power(self.observed_p_matrix if mat is None else mat, order)
 
     def prob_to_freq_matrix(
-            self,
-            mat: np.ndarray = None,
-            row_totals: np.ndarray = None) -> np.ndarray:
-        '''Calculate a transition frequency matrix given a transition
+        self, mat: Optional[np.ndarray] = None, row_totals: Optional[np.ndarray] = None
+    ) -> np.ndarray:
+        """Calculate a transition frequency matrix given a transition
         probability matrix and row totals. This method is meant to be
         used to calculate a frequency matrix for a Nth order
         transition probability matrix.
@@ -113,17 +108,15 @@ class MarkovChain:
         -------
         x : numpy.ndarray
             Transition frequency matrix.
-        '''
+        """
 
         _mat = self.observed_p_matrix if mat is None else mat
         _rt = self._obs_row_totals if row_totals is None else row_totals
         _rt = _rt[:, None] if _rt.ndim == 1 else _rt
         return _mat * _rt
 
-    def from_data(
-            self,
-            seq: Union[str, np.ndarray, list]) -> object:
-        '''Infer a Markov chain from data. States, frequency and probability
+    def from_data(self, seq: Union[str, np.ndarray, list]) -> object:
+        """Infer a Markov chain from data. States, frequency and probability
         matrices are automatically calculated and assigned to as class
         attributes.
 
@@ -137,7 +130,7 @@ class MarkovChain:
         -------
         MarkovChain : object
             Trained MarkovChain class instance.
-        '''
+        """
         # states list
         self.seq = np.array(list(seq))
         self.states = np.unique(list(seq))
@@ -157,18 +150,17 @@ class MarkovChain:
         self.observed_p_matrix[zero_row, :] = uniform_p
 
         # expected transition frequency matrix
-        self.expected_matrix = ss.contingency.expected_freq(
-            self.observed_matrix)
+        self.expected_matrix = ss.contingency.expected_freq(self.observed_matrix)
 
         return self
 
     def chisquare(
-            self,
-            obs: np.ndarray = None,
-            exp: np.ndarray = None,
-            **kwargs
-            ) -> Tuple[Union[float, np.ndarray], Union[float, np.ndarray]]:
-        '''Wrapper function for carrying out a chi-squared test using
+        self,
+        obs: Optional[np.ndarray] = None,
+        exp: Optional[np.ndarray] = None,
+        **kwargs,
+    ) -> Tuple[Union[float, np.ndarray], Union[float, np.ndarray]]:
+        """Wrapper function for carrying out a chi-squared test using
         `scipy.stats.chisquare` method.
 
         Parameters
@@ -189,14 +181,14 @@ class MarkovChain:
 
         p : float or numpy.ndarray
             P value of the test.
-        '''
+        """
 
         _obs = self.observed_matrix if obs is None else obs
         _exp = self.expected_matrix if exp is None else exp
         return ss.chisquare(f_obs=_obs, f_exp=_exp, **kwargs)
 
     def graph_make(self, *args, **kwargs) -> Digraph:
-        '''Make a directed graph of a Markov chain using `graphviz`.
+        """Make a directed graph of a Markov chain using `graphviz`.
 
         Parameters
         ----------
@@ -215,7 +207,7 @@ class MarkovChain:
         Note
         ----
         `graphviz.dot.Digraph.render` method should be used to output a file.
-        '''
+        """
         self.graph = Digraph(*args, **kwargs)
 
         ids = range(len(self.states))
@@ -232,15 +224,15 @@ class MarkovChain:
         return self.graph
 
     def simulate(
-            self,
-            n: int,
-            tf: np.ndarray = None,
-            states: Optional[Union[np.ndarray, list]] = None,
-            start: Optional[Union[str, int]] = None,
-            ret: str = 'both',
-            seed: Optional[Union[list, np.ndarray]] = None
-            ) -> Union[np.ndarray, Tuple[np.ndarray, np.ndarray]]:
-        '''Markov chain simulation based on `scipy.stats.multinomial`.
+        self,
+        n: int,
+        tf: Optional[np.ndarray] = None,
+        states: Optional[Union[np.ndarray, list]] = None,
+        start: Optional[Union[str, int]] = None,
+        ret: str = "both",
+        seed: Optional[Union[list, np.ndarray]] = None,
+    ) -> Union[np.ndarray, Tuple[np.ndarray, np.ndarray]]:
+        """Markov chain simulation based on `scipy.stats.multinomial`.
 
         Parameters
         ----------
@@ -279,7 +271,7 @@ class MarkovChain:
         y : numpy.ndarray, optional
             Sequence of state names.
             Returned if `return` arg is set to 'states' or 'both'.
-        '''
+        """
         # matrices init
         if tf is None:
             tf = self.observed_matrix
@@ -299,8 +291,8 @@ class MarkovChain:
             row_totals = tf.sum(axis=1)
             _start = np.argmax(row_totals / tf.sum())
         elif isinstance(start, int):
-            _start = start if start < len(states) else len(states)-1
-        elif start == 'random':
+            _start = start if start < len(states) else len(states) - 1
+        elif start == "random":
             _start = np.random.randint(0, len(states))
         elif isinstance(start, str):
             _start = np.argwhere(states == start).item()
@@ -314,15 +306,13 @@ class MarkovChain:
 
         # simulation procedure
         for i in range(1, n):
-            _ps = fp[seq[i-1]]
-            _sample = np.argmax(
-                ss.multinomial.rvs(1, _ps, 1, random_state=r_states[i])
-            )
+            _ps = fp[seq[i - 1]]
+            _sample = np.argmax(ss.multinomial.rvs(1, _ps, 1, random_state=r_states[i]))
             seq[i] = _sample
 
-        if ret == 'indices':
+        if ret == "indices":
             return seq
-        elif ret == 'states':
+        elif ret == "states":
             return states[seq]
         else:
             return seq, states[seq]
