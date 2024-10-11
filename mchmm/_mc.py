@@ -187,11 +187,15 @@ class MarkovChain:
         _exp = self.expected_matrix if exp is None else exp
         return ss.chisquare(f_obs=_obs, f_exp=_exp, **kwargs)
 
-    def graph_make(self, *args, **kwargs) -> Digraph:
+    def graph_make(self, p_thresh: float = 0.0, *args, **kwargs) -> Digraph:
         """Make a directed graph of a Markov chain using `graphviz`.
 
         Parameters
         ----------
+        p_thresh, float : optional, default is 0.0
+            Value bewteen 0 and 1. Only draw links between states that
+            have a value greater than or equal to p_thresh according
+            to the observed_p_matrix.
         args : optional
             Arguments passed to the underlying `graphviz.Digraph` method.
 
@@ -218,8 +222,10 @@ class MarkovChain:
             v2 = edge[1]
             s1 = self.states[v1]
             s2 = self.states[v2]
-            p = str(np.round(self.observed_p_matrix[v1, v2], 2))
-            self.graph.edge(s1, s2, label=p, weight=p)
+            p = np.round(self.observed_p_matrix[v1, v2], 2)
+            if p >= p_thresh:
+                p = str(p)
+                self.graph.edge(s1, s2, label=p, weight=p)
 
         return self.graph
 
