@@ -308,7 +308,7 @@ class MarkovChain:
         seq[0] = _start
 
         # random seeds
-        r_states = np.random.randint(0, n, n) if seed is None else seed
+        r_states = np.random.randint(0, 999999, n) if seed is None else seed
 
         # simulation procedure
         for i in range(1, n):
