@@ -7,7 +7,7 @@ name = "mchmm"
 dynamic = ["version"]
 description = "Markov chains and Hidden Markov models"
 readme = "DESCRIPTION.rst"
-requires-python = ">=3.6"
+requires-python = ">=3.9"
 keywords = ["statistics", "markov chains", "hidden markov models"]
 license.file = "LICENSE"
 authors = [{ name = "Maksim Terpilovskii", email = "maximtrp@gmail.com" }]
@@ -20,13 +20,11 @@ classifiers = [
     "Topic :: Scientific/Engineering :: Mathematics",
     "License :: OSI Approved :: MIT License",
     "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.6",
-    "Programming Language :: Python :: 3.7",
-    "Programming Language :: Python :: 3.8",
     "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
 ]
 urls.homepage = "https://github.com/maximtrp/mchmm"
 urls.documentation = "https://mchmm.rtfd.io"
