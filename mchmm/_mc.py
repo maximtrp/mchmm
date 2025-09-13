@@ -131,6 +131,10 @@ class MarkovChain:
         MarkovChain : object
             Trained MarkovChain class instance.
         """
+        # Input validation
+        if len(seq) == 0:
+            raise ValueError("Input sequence cannot be empty")
+
         # states list
         self.seq = np.array(list(seq))
         self.states = np.unique(list(seq))
@@ -140,8 +144,12 @@ class MarkovChain:
         self._obs_row_totals = np.sum(self.observed_matrix, axis=1)
 
         # observed transition probability matrix
-        self.observed_p_matrix = np.nan_to_num(
-            self.observed_matrix / self._obs_row_totals[:, None]
+        # Use np.divide with where parameter to handle division by zero safely
+        self.observed_p_matrix = np.divide(
+            self.observed_matrix,
+            self._obs_row_totals[:, None],
+            out=np.zeros_like(self.observed_matrix),
+            where=self._obs_row_totals[:, None] != 0
         )
 
         # filling in a row containing zeros with uniform p values
@@ -278,12 +286,18 @@ class MarkovChain:
             Sequence of state names.
             Returned if `return` arg is set to 'states' or 'both'.
         """
+        # Input validation
+        if n <= 0:
+            raise ValueError("Number of states to simulate must be positive")
+
         # matrices init
         if tf is None:
             tf = self.observed_matrix
             fp = self.observed_p_matrix
         else:
-            fp = tf / tf.sum(axis=1)[:, None]
+            # Use safe division for transition frequency to probability conversion
+            row_sums = tf.sum(axis=1)[:, None]
+            fp = np.divide(tf, row_sums, out=np.zeros_like(tf, dtype=float), where=row_sums != 0)
 
         # states init
         if states is None:

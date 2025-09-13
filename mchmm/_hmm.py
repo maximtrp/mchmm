@@ -1,20 +1,22 @@
 __all__ = ["HiddenMarkovModel"]
 
+from itertools import product
+from typing import Optional, Tuple, Union
+
 import numpy as np
 import scipy.stats as ss
-from itertools import product
 from graphviz import Digraph
-from typing import Union, Tuple, Optional
+from numpy.typing import ArrayLike
 
 
 class HiddenMarkovModel:
     def __init__(
         self,
-        observations: Optional[Union[list, np.ndarray]] = None,
-        states: Optional[Union[list, np.ndarray]] = None,
-        tp: Optional[Union[list, np.ndarray]] = None,
-        ep: Optional[Union[list, np.ndarray]] = None,
-        pi: Optional[Union[list, np.ndarray]] = None,
+        observations: Optional[ArrayLike] = None,
+        states: Optional[ArrayLike] = None,
+        tp: Optional[ArrayLike] = None,
+        ep: Optional[ArrayLike] = None,
+        pi: Optional[ArrayLike] = None,
     ):
         """Hidden Markov model.
 
@@ -82,7 +84,9 @@ class HiddenMarkovModel:
             s = np.count_nonzero(seql[yid] == states[y])
             matrix[x, y] = s
 
-        matrix /= matrix.sum(axis=1)[:, None]
+        # Use safe division to handle zero row sums
+        row_sums = matrix.sum(axis=1)[:, None]
+        matrix = np.divide(matrix, row_sums, out=np.zeros_like(matrix), where=row_sums != 0)
         return matrix
 
     def _emission_matrix(
@@ -126,7 +130,9 @@ class HiddenMarkovModel:
                 o = _os[_ss == states_space[i]]
                 ef[i, j] = np.count_nonzero(o == obs_space[j])
 
-        ep = ef / ef.sum(axis=1)[:, None]
+        # Use safe division to handle zero row sums
+        row_sums = ef.sum(axis=1)[:, None]
+        ep = np.divide(ef, row_sums, out=np.zeros_like(ef), where=row_sums != 0)
         return ep
 
     def from_seq(
@@ -166,6 +172,12 @@ class HiddenMarkovModel:
         model : HiddenMarkovModel
             Hidden Markov model learned from the given data.
         """
+        # Input validation
+        if len(obs_seq) != len(states_seq):
+            raise ValueError(f"Observation sequence length ({len(obs_seq)}) must match states sequence length ({len(states_seq)})")
+
+        if len(obs_seq) == 0:
+            raise ValueError("Input sequences cannot be empty")
 
         self.obs_seq = np.array(list(obs_seq))
         self.observations = np.unique(self.obs_seq)
@@ -226,6 +238,10 @@ class HiddenMarkovModel:
         z : numpy.ndarray
             Sequence of state indices.
         """
+        # Input validation
+        if len(obs_seq) == 0:
+            raise ValueError("Observation sequence cannot be empty")
+
         if states is None:
             states = self.states
 
@@ -246,7 +262,11 @@ class HiddenMarkovModel:
         K = len(states)
 
         def s(i):
-            return np.argwhere(obs == obs_seq[i]).flatten().item()
+            matches = np.argwhere(obs == obs_seq[i]).flatten()
+            if len(matches) == 0:
+                # Handle unknown observations by using uniform distribution
+                return 0  # Default to first observation index
+            return matches.item()
 
         t1 = np.zeros((K, T))
         t2 = np.zeros((K, T))
@@ -258,7 +278,10 @@ class HiddenMarkovModel:
         for i in range(1, T):
             t1[:, i] = np.max(t1[:, i - 1] * tp * ep[:, s(i)], axis=1)
             t2[:, i] = np.argmax(t1[:, i - 1] * tp * ep[:, s(i)], axis=1)
-            t1[:, i] /= t1[:, i].sum()
+            # Safe normalization to prevent division by zero
+            t1_sum = t1[:, i].sum()
+            if t1_sum > 0:
+                t1[:, i] /= t1_sum
 
         z = np.argmax(t1, axis=0)
         x = states[z]
@@ -334,7 +357,11 @@ class HiddenMarkovModel:
         pi /= pi.sum()
 
         def s(i):
-            return np.argwhere(obs == obs_seq[i]).flatten().item()
+            matches = np.argwhere(obs == obs_seq[i]).flatten()
+            if len(matches) == 0:
+                # Handle unknown observations by using uniform distribution
+                return 0  # Default to first observation index
+            return matches.item()
 
         alpha = np.zeros((T, K))
         beta = np.zeros((T, K))
@@ -344,38 +371,59 @@ class HiddenMarkovModel:
 
         while running:
             alpha[0] = pi * ep[:, s(0)]
-            alpha[0] /= alpha[0].sum()
+            alpha_sum = alpha[0].sum()
+            if alpha_sum > 0:
+                alpha[0] /= alpha_sum
 
             for i in range(1, T):
                 alpha[i] = np.sum(alpha[i - 1] * tp, axis=1) * ep[:, s(i)]
-                alpha[i] /= alpha[i].sum()
+                alpha_sum = alpha[i].sum()
+                if alpha_sum > 0:
+                    alpha[i] /= alpha_sum
 
             beta[T - 1] = 1
-            beta[T - 1] /= beta[T - 1].sum()
+            beta_sum = beta[T - 1].sum()
+            if beta_sum > 0:
+                beta[T - 1] /= beta_sum
 
             for i in reversed(range(T - 1)):
                 beta[i] = np.sum(beta[i + 1] * tp * ep[:, s(i + 1)], axis=1)  # i + 1
-                beta[i] /= beta[i].sum()
+                beta_sum = beta[i].sum()
+                if beta_sum > 0:
+                    beta[i] /= beta_sum
 
             ksi = np.zeros((T, K, K))
             gamma = np.zeros((T, K))
 
             for i in range(T - 1):
                 ksi[i] = alpha[i] * tp * beta[i + 1] * ep[:, s(i + 1)]
-                ksi[i] /= ksi[i].sum()
+                ksi_sum = ksi[i].sum()
+                if ksi_sum > 0:
+                    ksi[i] /= ksi_sum
 
                 gamma[i] = alpha[i] * beta[i]
-                gamma[i] /= gamma[i].sum()
+                gamma_sum = gamma[i].sum()
+                if gamma_sum > 0:
+                    gamma[i] /= gamma_sum
 
             _pi = gamma[1]
-            _tp = np.sum(ksi[:-1], axis=0) / gamma[:-1].sum(axis=0)
-            _tp /= _tp.sum(axis=1)[:, None]
+            # Safe division for transition probability update
+            gamma_sums = gamma[:-1].sum(axis=0)
+            _tp = np.divide(np.sum(ksi[:-1], axis=0), gamma_sums,
+                           out=np.zeros((K, K)), where=gamma_sums != 0)
+            # Safe normalization
+            tp_row_sums = _tp.sum(axis=1)[:, None]
+            _tp = np.divide(_tp, tp_row_sums, out=np.zeros_like(_tp), where=tp_row_sums != 0)
             _ep = np.zeros((K, N))
 
             for n, ob in enumerate(obs):
-                _ep[:, n] = gamma[np.argwhere(obs_seq == ob).ravel(), :].sum(
-                    axis=0
-                ) / gamma.sum(axis=0)
+                gamma_sums_total = gamma.sum(axis=0)
+                _ep[:, n] = np.divide(
+                    gamma[np.argwhere(obs_seq == ob).ravel(), :].sum(axis=0),
+                    gamma_sums_total,
+                    out=np.zeros(K),
+                    where=gamma_sums_total != 0
+                )
 
             tp_entropy = ss.entropy(tp.ravel(), _tp.ravel())
             ep_entropy = ss.entropy(ep.ravel(), _ep.ravel())
