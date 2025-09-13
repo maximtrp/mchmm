@@ -7,8 +7,17 @@
 [![Downloads](https://static.pepy.tech/badge/mchmm)](https://pepy.tech/project/mchmm)
 [![PyPi](https://img.shields.io/pypi/v/mchmm.svg)](https://pypi.python.org/pypi/mchmm)
 
-*mchmm* is a Python package implementing Markov chains and Hidden Markov models in pure NumPy and SciPy.
-It can also visualize Markov chains (see below).
+A Python package for statistical modeling with Markov chains and Hidden Markov models. Built on NumPy and SciPy, `mchmm` provides efficient implementations of core algorithms including Viterbi decoding and Baum-Welch parameter estimation. The package also includes visualization capabilities for understanding model structure and behavior.
+
+## Key Features
+
+- **Discrete Markov Chains**: Build transition models from sequence data with automatic state inference
+- **Hidden Markov Models**: Implement HMMs with customizable observation and state spaces
+- **Viterbi Algorithm**: Find most likely state sequences for new observations
+- **Baum-Welch Algorithm**: Learn HMM parameters from unlabeled sequence data
+- **Statistical Testing**: Built-in chi-squared tests for model validation
+- **Visualization**: Generate directed graphs of Markov models using Graphviz
+- **Simulation**: Generate synthetic sequences from trained models
 
 ## Donate
 
@@ -16,33 +25,29 @@ If you find this package useful, please consider donating any amount of money. T
 
 <a href="https://www.buymeacoffee.com/maximtrp" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me A Coffee" style="height: 60px !important;width: 217px !important;" ></a>
 
-Dependencies
-------------
+## Installation
 
-* [NumPy](https://www.numpy.org)
-* [SciPy](https://www.scipy.org)
-
-
-Installation
-------------
-
-1. Install from PyPi:
-
+Install from PyPI:
 ```bash
 pip install mchmm
 ```
 
-2. Clone a GitHub repository:
-
+Or install from source:
 ```bash
 git clone https://github.com/maximtrp/mchmm.git
 cd mchmm
 pip install . --user
 ```
 
-## Features
+## Dependencies
 
-### Discrete Markov chains
+- [NumPy](https://www.numpy.org) - Numerical computing
+- [SciPy](https://www.scipy.org) - Scientific computing and statistics
+- [Graphviz](https://graphviz.org/) - Graph visualization (optional)
+
+## Quick Start
+
+### Discrete Markov Chains
 
 Initializing a Markov chain using some data.
 
@@ -136,9 +141,9 @@ states
 # 'ACBACBACBA'
 ```
 
-## Hidden Markov models
+### Hidden Markov Models
 
-We will use a fragment of DNA sequence with TATA box as an example. Initializing a hidden Markov model with sequences of observations and states:
+Build HMMs from paired observation and state sequences. This example uses a DNA fragment with TATA box annotation:
 
 ```python
 import mchmm as mc
@@ -196,9 +201,9 @@ graph = a.graph_make(
 graph.render()
 ```
 
-### Viterbi algorithm
+#### Viterbi Algorithm
 
-Running Viterbi algorithm on new observations.
+Decode the most likely state sequence for new observations:
 
 ```python
 new_obs = "GGCATTGGGCTATAAGAGGAGCTTG"
@@ -211,9 +216,9 @@ print("NO", new_obs)
 # NO GGCATTGGGCTATAAGAGGAGCTTG
 ```
 
-### Baum-Welch algorithm
+#### Baum-Welch Algorithm
 
-Using Baum-Welch algorithm to infer the parameters of a Hidden Markov model:
+Learn HMM parameters from unlabeled sequence data using expectation-maximization:
 
 ```python
 obs_seq = 'AGACTGCATATATAAGGGGCAGGCTG'
